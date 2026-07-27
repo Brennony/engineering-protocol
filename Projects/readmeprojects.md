@@ -1,0 +1,2 @@
+# Projects Information
+This folder contains all of the projects I have made in my engineering studies in different subsequent folders as of July 26th, 2026. Anything made before that point is likely not included, but I will try my best to update this folder with any projects BEFORE July 26th, 2026. 
