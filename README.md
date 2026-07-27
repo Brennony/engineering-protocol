@@ -39,12 +39,12 @@ Become a highly capable software engineer through disciplined learning, consiste
  - Value curiosity, discipline, and craftsmanship.
 
 ### REPOSITORY STRUCTURE INFORMATION:
-Career/             Career planning and documentation
-Learning/           Study notes and technical resources
-Notes/              Daily and weekly engineering journal
-Portfolio/          Personal website and professional materials
-Projects/           Software projects and experiments
-Resume/             Resume versions and career documents
+Career/             Career planning and documentation\
+Learning/           Study notes and technical resources\
+Notes/              Daily and weekly engineering journal\
+Portfolio/          Personal website and professional materials\
+Projects/           Software projects and experiments\
+Resume/             Resume versions and career documents\
 
 ### PROGRESS:
 ##### Day 0-
