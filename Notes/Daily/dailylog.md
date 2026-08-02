@@ -70,7 +70,25 @@ I did pretty well today, but I was unsuccesful in selling and following up with 
 
 # Day 4
 ##### 7/31/2026
-##### 
+##### 2 Hours Spent
+## Objective: 
+Build a calculator program and reinforce python concepts with programming, start business notes.
+## What I Learned:
+Python is much different to C+ in many ways, and even though I learned Python a while back and thought it was adequate, I realize now that I do not have nearly enough practice in this coding field as of yet. 
+## Biggest Takeaway:
+Python is super easy to use, the only hard part is putting the work into making a working program, debugging it, and revitalizing any wrong parts. I just need to put in the work and put in the "perfect" practice.
+## What Confused Me:
+Python gave me a strange orange problem today, and it was on one of my functions inside of my about_me.py that I began to fix up and change stuff on. Also, I am quite confused how a Try/Except loop works still.
+## Wins Today: 
+I learned quite a bit more about coding and I put a lot of good practice in. I succesfully completed all tasks and made my Calculator go above and beyond the prompt the AI gave me.
+## Tomorrow's Goal:
+Lock in and build a project, something that I can look at and be proud of!
+## Reflection:
+I did very well today in business and coding, and I think tomorrow will be better if I just can put in the work and take in what Val told me about being more persistent and making everything close ended in my questioning. I'm worth more than I think, and I gotta show people that. 
+
+# Day 5
+#####
+#####
 ## Objective: 
 ## What I Learned:
 ## Biggest Takeaway:
