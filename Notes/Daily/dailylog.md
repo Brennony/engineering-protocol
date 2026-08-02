@@ -87,8 +87,26 @@ Lock in and build a project, something that I can look at and be proud of!
 I did very well today in business and coding, and I think tomorrow will be better if I just can put in the work and take in what Val told me about being more persistent and making everything close ended in my questioning. I'm worth more than I think, and I gotta show people that. 
 
 # Day 5
-#####
-#####
+##### 8/1/2026
+##### 3 1/2 Hours Spent
+## Objective: 
+Update Calculator and other python programs and integrate better functionality. Also begin setting up instagram and youtube profiles.
+## What I Learned:
+Python can be tricky with it's syntax but once it clicked it felt really good today. I'm happy with the progress I made but I learned that even if I only make a small amount of progress towards my goals, in the long term it is exponential!
+## Biggest Takeaway:
+I need to spend more time understanding python logic than learning syntax and code, because the for-loop and other features will making my head hurt today until I fully understood how they worked.
+## What Confused Me:
+It's hard for me not to get variables and declarations of variables all jumbled in my head with functions.
+## Wins Today: 
+It's a good day, I spent a good chunk of time on coding, and I finished some things. I also learned more about how I should be opearting GIT. I didn't get my youtube pages and instagrams fully set up but that's totally ok!
+## Tomorrow's Goal:
+I will simply have a chiller day tomorrow. However, I'll try and spend 30->45 minutes fixing things up.
+## Reflection:
+I had a great day of coding and getting projects done. I got meetings setup for the week, and I'm doing great. However, I know I can do better. God help me and give me strength. I need it. Christ is Lord, Amen!
+
+# Day 6
+##### 
+##### 
 ## Objective: 
 ## What I Learned:
 ## Biggest Takeaway:
