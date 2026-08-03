@@ -105,12 +105,19 @@ I will simply have a chiller day tomorrow. However, I'll try and spend 30->45 mi
 I had a great day of coding and getting projects done. I got meetings setup for the week, and I'm doing great. However, I know I can do better. God help me and give me strength. I need it. Christ is Lord, Amen!
 
 # Day 6
-##### 
-##### 
+##### 8/2/2026
+##### 2-3 Hours Spent
 ## Objective: 
-## What I Learned:
+Today was my first review day. I will probably change the format of these one day so they fit my goals more and a more formatted idea. However, at the moment I am simply just happy to have my socials up.
+## What I Learned This Week
+This whole week I started learning important processes like how to use GIT, started making my first projects with Python, and started learning a whole new Kernel with Linux.
 ## Biggest Takeaway:
+Coding is hard, and everything takes time. I just need the consistency!
 ## What Confused Me:
-## Wins Today: 
+A lot has confused me this week, like Python syntax, Linux Super-user and bins and how that all works together, and of course how Git's systems and backends work.
+## Wins This Week:
+I was fully consistent, I put a lot of work on the dials, and I still managed to have fun and find a good balance. I could definitely improve that.
 ## Tomorrow's Goal:
+I will dial, and I will code. That's all. I don't need to worry much about the outcomes, just what I can do and how I can work.
 ## Reflection:
+I did a lot this week, and this Protocol was an amazing place to start. I'm so grateful for God. I will do better this week. Lord help me, God bless. Amen!
