@@ -7,6 +7,31 @@ import statistics
 
 record = []
 
+def main():
+    print("--------------------------")
+    print("--Student Record Program--")
+    print("--------------------------\n")
+    while True:
+        choice = getFunction()
+        if choice == 0:
+            break
+        elif choice == 1:
+            listStudent()
+        elif choice == 2:
+            displayStudent()
+        elif choice == 3:
+            addStudent()
+        elif choice == 4:
+            deleteStudent()
+        else:
+            break
+        # Again?
+        again = input("Would you like to quit (y/n)?: ")
+        if again == "y":
+            break
+        else:
+            print("")
+
 def getFunction():
     print("-Please select a function-")
     print("1. List Students and Number")
@@ -98,27 +123,4 @@ def displayStudent():
             
 
 # Actual Program
-
-print("--------------------------")
-print("--Student Record Program--")
-print("--------------------------\n")
-while True:
-    choice = getFunction()
-    if choice == 0:
-        break
-    elif choice == 1:
-        listStudent()
-    elif choice == 2:
-        displayStudent()
-    elif choice == 3:
-        addStudent()
-    elif choice == 4:
-        deleteStudent()
-    else:
-        break
-
-    again = input("Would you like to quit (y/n)?: ")
-    if again == "y":
-        break
-    else:
-        print("")
+main()

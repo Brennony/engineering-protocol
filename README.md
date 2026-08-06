@@ -18,7 +18,7 @@ Become a highly capable software engineer through disciplined learning, consiste
  - Build 10-15 strong production-worthy projects.
  - Gain Co-op internship experience while in college.
  - Become proficient in backend engineering, cloud infrastructure, software, workflows, and artificial intelligence.
- - Earn a full-time remote software engineering position with strong opportunities for technical growth.
+ - Build a meaningful business with software engineering.
  - Continue learning throughout my career and contribute meaningful software.
  - Add something impactful to the world. 
 
@@ -41,7 +41,6 @@ Become a highly capable software engineer through disciplined learning, consiste
 ### REPOSITORY STRUCTURE INFORMATION:
 Career/:             Career planning and documentation\
 Learning/:           Study notes and technical resources\
-Notes/:              Daily and weekly engineering journal\
 Portfolio/:          Personal website and professional materials\
 Projects/:           Software projects and experiments\
 Resume/:             Resume versions and career documents\
