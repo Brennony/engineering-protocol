@@ -1,4 +1,7 @@
-# Brennon York  |  Calculator v1.0  |  7/31/2026
+# Brennon York  |  Calculator v1.0  |  8/5/2026
+
+# Calculator v1.1: I abstracted more and made more appealing functions
+
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
@@ -11,11 +14,58 @@
 
 
 # Defining Functions
+def getFunction():
+    print("=====================================")
+    print("Available Functions:")
+    print("1. Operation")
+    print("2. Quit")
+    print("=====================================\n")
+    while True:
+        function = input("Select a function: ")
+        try:
+            if function not in ("1", "2"):
+                print("Please select a valid function.")
+            else:
+                break
+        except ValueError:
+            print("Please select a valid function.")
+    return int(function)
+
+def doOperation():
+# Calculating (Eventually I want to make this process more streamlined)
+# IDEA: Initialize operations as functions once there are more complicated functions
+    # Getting Valid Operation
+    operation = getOperator()
+
+    # Getting Valid Numbers (On a later day, we can add multi-operation functionality)
+    num1, num2 = getVariables(2)
+
+    # Division by zero?
+    if operation in ('/', '%'):
+        num2 = zeroDivision(num2)
+
+    # Calculation
+    if operation == '+':
+        answer = num1 + num2
+    elif operation == '-':
+        answer = num1 - num2 
+    elif operation == '*':
+        answer = num1 * num2
+    elif operation == '/':
+        answer = num1 / num2
+    elif operation == '%':
+        answer = num1 % num2
+    else:
+        answer = num1 ** num2
+    # Print Results
+    print(f"{num1} {operation} {num2} = {answer}")
+    print("")
+
 def getOperator():
     while True:
         operation = input("Enter operation (+, -, *, /, %, **): ")
         if operation not in ('+', '-', '*', '/', '%', '**'):
-            operation = input("Please select a valid operation (+, -, *, /, %, **): ")
+            print("Please select a valid operation.")
         else:
             return operation
 
@@ -49,47 +99,8 @@ print("=====  PYTHON CALCULATOR V1.0  ======")
 print("=====================================")
 
 while True:
-    # Defining Variables
-    again = '' 
-    answer = 0
-    operation = ''
-
-    # Getting Valid Operation
-    operation = getOperator()
-
-    # Getting Valid Numbers (On a later day, we can add multi-operation functionality)
-    num1, num2 = getVariables(2)
-
-    # Division by zero?
-    if operation in ('/', '%'):
-        num2 = zeroDivision(num2)
-
-
-    # Calculating (Eventually I want to make this process more streamlined)
-    # IDEA: Initialize operations as functions once there are more complicated functions
-    if operation == '+':
-        answer = num1 + num2
-    elif operation == '-':
-        answer = num1 - num2 
-    elif operation == '*':
-        answer = num1 * num2
-    elif operation == '/':
-        answer = num1 / num2
-    elif operation == '%':
-        answer = num1 % num2
+    answer = getFunction()
+    if answer == 1:
+        doOperation()
     else:
-        answer = num1 ** num2
-
-    # Print Results
-    print(f"{num1} {operation} {num2} = {answer}")
-    print("")
-
-    # Start Again?
-    again = input("Calculate Again (y/n)?: ").lower()
-    while True:
-        if again not in ('y', 'n'):
-            again = input("Enter Valid Answer (y/n): ").lower()
-        else:
-            break
-    if again == 'n':
-        break
+        break 
