@@ -25,7 +25,7 @@ Become a highly capable software engineer through disciplined learning, consiste
 ### CURRENT FOCUS (2026-2027):
  - Strengthen Python and C++ skills.
  - Master Git and GitHub workflows.
- - Learn linux as a daily development environment.
+ - Learn Linux as a daily development environment.
  - Build a solid understanding of SQL and relational databases.
  - Study data-structures and algorithms.
  - Develop and deploy my first backend applications.
@@ -46,9 +46,7 @@ Portfolio/:          Personal website and professional materials\
 Projects/:           Software projects and experiments\
 Resume/:             Resume versions and career documents\
 
-### PROGRESS:
-##### Day 0-
-Started: July 26th, 2026, 23:18 PM.
-Today is the day I begin my journey to becoming a better engineer.
-There is no finish line,
-Only continuous learning, continuous building, and continuous improvement.
+
+### Social Links (Follow Along):
+YouTube: https://www.youtube.com/@brennonyork
+Instagram: https://www.instagram.com/brennonbuilds/
