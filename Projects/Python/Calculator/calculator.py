@@ -1,4 +1,4 @@
-# Brennon York  |  Calculator v1.0  |  8/5/2026
+# Brennon York  |  Calculator v1.1  |  8/5/2026
 
 # Calculator v1.1: I abstracted more and made more appealing functions
 

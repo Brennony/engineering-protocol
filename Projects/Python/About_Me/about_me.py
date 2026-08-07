@@ -1,4 +1,4 @@
-# Brennon York  |  Beta 1.1 Prototype of about_me.py  |  7/30/2026
+# Brennon York  |  About Me v1.1  |  7/30/2026
 
 # Changed Names of Functions and Replaced Repeated Code
 
@@ -25,6 +25,7 @@ def validName(name):
         print("Please enter a valid name (letters only).")
         name = input("What is your name? ")
 
+# Main Program
 while True:
     # Get our Variables
     name = ''
