@@ -1,8 +1,10 @@
-# Brennon York  |  Student Record v2.0 |  8/5/2026
+# Brennon York  |  Student Record v2.0 |  8/6/2026
 
-# Version 2.0 works super well and is pretty much completely finished!
-# Maybe I will add a limit but for now it's finished!
+# Version 2.1: I added file-creating functionality. It will be improved more soon!
+#   Tomorrow... I add file opening and maybe deleting capabilities if possible.
 
+import csv
+import os
 import statistics
 
 record = []
@@ -67,10 +69,18 @@ def addStudent():
     gpa = getGpa()
     data = {"Name": name, "Age": age, "Major": major, "Gpa": gpa,}
     record.append(data)
+    with open("student_record.csv", "a", newline="") as file:
+        fieldnames = ["Name", "Age", "Major", "Gpa"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        if file.tell() == 0:
+            writer.writeheader()
+        writer.writerow(data)
 
 def deleteStudent():
     listStudent()
     while True:
+        if not record:
+            break
         try:
             choice = int(input("\nWhich student would you like to delete?: "))
             if 1 <= choice <= len(record):
@@ -120,7 +130,9 @@ def displayStudent():
             print(f"Age: {student["Age"]}")
             print(f"Major: {student["Major"]}")
             print(f"Gpa: {student["Gpa"]}")
-            
+
+def getFile():
+    quit            
 
 # Actual Program
 main()
