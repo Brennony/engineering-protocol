@@ -1,11 +1,8 @@
-# Brennon York  |  Student Record v2.0 |  8/6/2026
+# Brennon York  |  Student Record v2.2 |  8/7/2026
 
-# Version 2.1: I added file-creating functionality. It will be improved more soon!
-#   Tomorrow... I add file opening and maybe deleting capabilities if possible.
+# Version 2.2: File Loading, Deleting Users, Adding, etc.. Making great progress.
 
 import csv
-import os
-import statistics
 
 record = []
 
@@ -27,12 +24,6 @@ def main():
             deleteStudent()
         else:
             break
-        # Again?
-        again = input("Would you like to quit (y/n)?: ")
-        if again == "y":
-            break
-        else:
-            print("")
 
 def getFunction():
     print("-Please select a function-")
@@ -69,12 +60,7 @@ def addStudent():
     gpa = getGpa()
     data = {"Name": name, "Age": age, "Major": major, "Gpa": gpa,}
     record.append(data)
-    with open("student_record.csv", "a", newline="") as file:
-        fieldnames = ["Name", "Age", "Major", "Gpa"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        if file.tell() == 0:
-            writer.writeheader()
-        writer.writerow(data)
+    saveStudents()
 
 def deleteStudent():
     listStudent()
@@ -85,6 +71,7 @@ def deleteStudent():
             choice = int(input("\nWhich student would you like to delete?: "))
             if 1 <= choice <= len(record):
                 del record[choice - 1]
+                saveStudents()
                 print("Student deleted successfully.")
                 break
             else:
@@ -93,8 +80,12 @@ def deleteStudent():
             print("Please enter a valid student number.")
 
 def getName():
-    student = str(input("Student Name: "))
-    return student.title().strip()
+    while True:
+        student = str(input("Student Name: "))
+        if student.isalpha():
+            return student.title().strip()
+        else:
+            print("Please enter only letters.\n")
 
 def getAge():
     while True:
@@ -125,14 +116,32 @@ def displayStudent():
     else:
         for i, student in enumerate(record, start=1):            
             print()
-            print(f"--Student {i+1}--")
+            print(f"--Student {i}--")
             print(f"Name: {student["Name"]}")
             print(f"Age: {student["Age"]}")
             print(f"Major: {student["Major"]}")
-            print(f"Gpa: {student["Gpa"]}")
+            print(f"Gpa: {student["Gpa"]}\n")
+         
+def loadStudents():
+    try:
+        with open("student_record.csv", "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                row["Age"] = int(row["Age"])
+                row["Gpa"] = float(row["Gpa"])
+                record.append(row)
+    except FileNotFoundError:
+        return
 
-def getFile():
-    quit            
+def saveStudents():
+    with open("student_record.csv", "w", newline="") as file:
+        fieldnames = ["Name", "Age", "Major", "Gpa"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        if file.tell() == 0:
+            writer.writeheader()
+            for student in record:
+                writer.writerow(student)
 
-# Actual Program
+# Run main()
+loadStudents()
 main()
