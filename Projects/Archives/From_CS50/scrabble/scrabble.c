@@ -1,7 +1,38 @@
-#include <cs50.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+typedef char *string;
+
+string get_string(const char *prompt)
+{
+    if (prompt != NULL)
+    {
+        printf("%s", prompt);
+    }
+
+    char buffer[256];
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+    {
+        return NULL;
+    }
+
+    size_t len = strlen(buffer);
+    while (len > 0 && (buffer[len - 1] == '\n' || buffer[len - 1] == '\r'))
+    {
+        buffer[--len] = '\0';
+    }
+
+    string value = malloc(len + 1);
+    if (value == NULL)
+    {
+        return NULL;
+    }
+
+    strcpy(value, buffer);
+    return value;
+}
 
 // Array to assign points to each letter in the english alphabet
 int POINTS[] = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
