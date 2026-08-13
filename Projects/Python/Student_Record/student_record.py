@@ -26,6 +26,7 @@ def main():
             break
 
 def getFunction():
+    print("--------------------------")
     print("-Please select a function-")
     print("1. List Students and Number")
     print("2. Display Student Information")
