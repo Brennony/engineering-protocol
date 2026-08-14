@@ -16,7 +16,7 @@ import math_helpers
 
 # Defining Functions
 def main():
-    print("=====  PYTHON CALCULATOR V1.0  ======\n")
+    print("=====  PYTHON CALCULATOR V1.2.1  ======\n")
     while True:
         choice = getFunction()
         if choice == 0:
