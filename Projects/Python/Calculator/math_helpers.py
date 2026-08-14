@@ -1,4 +1,4 @@
-# Brennon York  |  Math Helpers v1.1  |  8/13/2026
+# Brennon York  |  Math Helpers v1.2  |  8/14/2026
 
 from math import sqrt, floor, ceil 
 

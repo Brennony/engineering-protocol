@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.2  |  8/5/2026
+# Brennon York  |  Calculator v1.2.1  |  8/14/2026
 
-# Calculator v1.2: Created a helper script for calculating.
+# Calculator v1.2.1: Updated Helper Script and Calculator Functionality.
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
