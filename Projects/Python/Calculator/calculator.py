@@ -1,7 +1,6 @@
-# Brennon York  |  Calculator v1.1  |  8/5/2026
+# Brennon York  |  Calculator v1.2  |  8/5/2026
 
-# Calculator v1.1: I abstracted more and made more appealing functions
-
+# Calculator v1.2: Created a helper script for calculating.
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
@@ -12,8 +11,24 @@
 #   4. Make a Calculation History Feature
 #   5. Release Calculus Capabilities
 
+import math_helpers
+
 
 # Defining Functions
+def main():
+    print("=====  PYTHON CALCULATOR V1.0  ======\n")
+    while True:
+        choice = getFunction()
+        if choice == 1:
+            operation = getOperator()
+            variables = getVariables(2)
+            if operation in ("/", "%"):
+                variables[1] = zeroDivision(variables[1])
+            doOperation(operation, variables)
+        elif choice == 2:
+            print("Thanks for using my calculator!")
+            break
+
 def getFunction():
     print("=====================================")
     print("Available Functions:")
@@ -22,44 +37,9 @@ def getFunction():
     print("=====================================\n")
     while True:
         function = input("Select a function: ")
-        try:
-            if function not in ("1", "2"):
-                print("Please select a valid function.")
-            else:
-                break
-        except ValueError:
-            print("Please select a valid function.")
-    return int(function)
-
-def doOperation():
-# Calculating (Eventually I want to make this process more streamlined)
-# IDEA: Initialize operations as functions once there are more complicated functions
-    # Getting Valid Operation
-    operation = getOperator()
-
-    # Getting Valid Numbers (On a later day, we can add multi-operation functionality)
-    num1, num2 = getVariables(2)
-
-    # Division by zero?
-    if operation in ('/', '%'):
-        num2 = zeroDivision(num2)
-
-    # Calculation
-    if operation == '+':
-        answer = num1 + num2
-    elif operation == '-':
-        answer = num1 - num2 
-    elif operation == '*':
-        answer = num1 * num2
-    elif operation == '/':
-        answer = num1 / num2
-    elif operation == '%':
-        answer = num1 % num2
-    else:
-        answer = num1 ** num2
-    # Print Results
-    print(f"{num1} {operation} {num2} = {answer}")
-    print("")
+        if function in ("1", "2"):
+            return int(function)
+        print("Please select a valid function.")
 
 def getOperator():
     while True:
@@ -74,33 +54,42 @@ def getVariables(amount):
     for i in range(amount):
         while True:
             try:
-                num = float(input(f"Enter number {i + 1}: "))
-                numbers.append(num)
+                number = float(input(f"Enter number {i + 1}: "))
+                numbers.append(number)
                 break
             except ValueError:
-                print(f"Please enter valid a real number (1.0, 5.2, etc) for number {i + 1}: ")
-    return numbers    
+                print(f"Please enter a valid number for number {i + 1}.")
+    return numbers 
 
-def zeroDivision(num2):
-    while True:
-        if num2 == 0:
-            try:
-                num2 = float(input(f"Please enter a non-zero number for division: "))
-                if num2 != 0:
-                    return float(num2)   
-            except ValueError:
-                print(f"Please enter a number for division: ")
-        else:
-            return float(num2)
+def zeroDivision(number):
+    while number == 0:
+        try:
+            number = float(input("Please enter a non-zero number for division: "))
+        except ValueError:
+            print("Please enter a valid number.")
+    return number
 
-# Full Calculator
-print("=====================================")
-print("=====  PYTHON CALCULATOR V1.0  ======")
-print("=====================================")
-
-while True:
-    answer = getFunction()
-    if answer == 1:
-        doOperation()
+def doOperation(operation, variables):
+    num1 = variables[0]
+    num2 = variables[1]
+    if operation == "+":
+        answer = math_helpers.addition(num1, num2)
+    elif operation == "-":
+        answer = math_helpers.subtraction(num1, num2)
+    elif operation == "*":
+        answer = math_helpers.multiplication(num1, num2)
+    elif operation == "/":
+        answer = math_helpers.division(num1, num2)
+    elif operation == "%":
+        answer = math_helpers.remainder(num1, num2)
+    elif operation == "**":
+        answer = math_helpers.power(num1, num2)
     else:
-        break 
+        return
+    print("=====================================")
+    print(f"{num1} {operation} {num2} = {answer}")
+    print("=====================================\n")
+
+
+# Performing Main
+main()
