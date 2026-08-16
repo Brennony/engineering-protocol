@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.2.2  |  8/14/2026
+# Brennon York  |  Calculator v1.2.3  |  8/16/2026
 
-# Calculator v1.2.2: Updated Helper Script, Added Algebra Functionality.
+# Calculator v1.2.3: Updated Algebra script with quadratics and reformatted sorting inputs.
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
@@ -25,21 +25,32 @@ def main():
         elif choice == 1:
             operation = getBasic()
             if operation in ("sqrt", "flr", "ceil", "abs"):
-                variables = getVariables(1, choice)
+                variables = getVariables(1, choice, operation)
                 if operation == "sqrt":
-                    variables[0] = sortInput(variables[0], operation)
+                    variables[0] = sortBasic(variables[0], operation)
             else:
-                variables = getVariables(2, choice)
+                variables = getVariables(2, choice, operation)
                 if operation in ("/", "%"):
-                    variables[1] = sortInput(variables[1], operation)
+                    variables[1] = sortBasic(variables[1], operation)
             doOperation(operation, variables)
         elif choice == 2:
             operation = getAlgebra()
             if operation == "slope":
-                variables = getVariables(2, choice)
-            else:
-                algebra_helpers.quadratic()
-                break
+                variables = getVariables(2, choice, operation)
+                undef = sortAlgebra(variables[0][0], variables[1][0], operation)
+                if undef:
+                    print("=====================================")
+                    print("The slope is undefined.")
+                    print("=====================================\n")
+                    continue
+            elif operation == "quad":
+                variables = getVariables(3, choice, operation)
+                undef = sortAlgebra(variables[0], None, operation)
+                if undef:
+                    print("=====================================")
+                    print("The quadratic is invalid.")
+                    print("=====================================\n")
+                    continue
             doAlgebra(operation, variables)
 
 def getFunction():
@@ -91,7 +102,7 @@ def getAlgebra():
         else:
             return operation
 
-def getVariables(amount, choice):
+def getVariables(amount, choice, operation):
     numbers = []
     if choice == 1:
         for i in range(amount):
@@ -104,24 +115,35 @@ def getVariables(amount, choice):
                     print(f"Please enter a valid number for number {i + 1}.")
         return numbers 
     elif choice == 2:
-        for i in range(amount):
-            point = []
-            for j in range(2):
+        if operation == "slope":
+            for i in range(amount):
+                point = []
+                for j in range(2):
+                    while True:
+                        try:
+                            if j == 0:
+                                number = float(input(f"Enter number for x{i+1}: "))
+                            else:
+                                number = float(input(f"Enter number for y{i+1}: "))
+                            point.append(number)
+                            break
+                        except ValueError:
+                            print("Please enter a valid number.")
+
+                numbers.append(point)
+            return numbers
+        elif operation == "quad":
+            for i in range(ord('a'), ord('c') + 1):
                 while True:
                     try:
-                        if j == 0:
-                            number = float(input(f"Enter number for x{i+1}: "))
-                        else:
-                            number = float(input(f"Enter number for y{i+1}: "))
-                        point.append(number)
+                        number = float(input(f"Enter number for variable {chr(i)}: "))
+                        numbers.append(number)
                         break
                     except ValueError:
                         print("Please enter a valid number.")
+            return numbers
 
-            numbers.append(point)
-        return numbers
-                    
-def sortInput(number, operation):
+def sortBasic(number, operation):
     if operation in ("/", "%"):
         while number == 0:
             try:
@@ -135,6 +157,18 @@ def sortInput(number, operation):
             except ValueError:
                 print("Please enter a valid number.")
     return number
+
+def sortAlgebra(num1, num2, operation):
+    if operation == "slope":
+        if num1 == num2:
+            return True
+        else:
+            return False
+    else:
+        if num1 == 0:
+            return True
+        else:
+            return False
 
 def doOperation(operation, variables):
     print("=====================================")
@@ -182,18 +216,30 @@ def doOperation(operation, variables):
     print("=====================================\n")
 
 def doAlgebra(operation, variables):
+    print("=====================================")
     if operation == "slope":
         x1 = variables[0][0]
         y1 = variables[0][1]
         x2 = variables[1][0]
         y2 = variables[1][1]
         answer = algebra_helpers.slope(x1,y1,x2,y2)
-        print("=====================================")
         if answer is None:
             print("The slope is undefined.")
         else:
             print(f"The slope of ({x1}, {y1}) and ({x2}, {y2}) = {answer}")
-        print("=====================================\n")
+    if operation == "quad":
+        a = variables[0]
+        b = variables[1]
+        c = variables[2]
+        answer1, answer2 = algebra_helpers.quadratic(a,b,c)
+        if answer1 is not None and answer2 is not None:
+            print(f"The roots of {a}x^2 + {b}x + {c} = 0: ")
+            print(f"  {answer1}, {answer2}  ")
+        elif answer1 == "zero":
+            print("Zero Division is impossible.")
+        else:
+            print("The quadratic is undefined.")
+    print("=====================================\n")
 
 # Performing Main
 main()
