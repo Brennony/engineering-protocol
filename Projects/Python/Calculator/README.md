@@ -52,6 +52,6 @@ Enter number 2: 5
 
 ## Version
 
-**v1.2.2 — Calculator with Libraries**
+**v1.2.3 — Calculator with Libraries**
 
 Built as part of my Python learning journey and Engineering Protocol.
