@@ -52,6 +52,6 @@ Enter number 2: 5
 
 ## Version
 
-**v1.2.4 — Calculator updated with testing and __name__ = "__main__"**
+**v1.2.5 — Finished alpha testing functionality**
 
 Built as part of my Python learning journey and Engineering Protocol.

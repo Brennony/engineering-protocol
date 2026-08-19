@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.2.4  |  8/16/2026
+# Brennon York  |  Calculator v1.2.5  |  8/16/2026
 
-# Calculator v1.2.4: __name__ == "__main__" functionality, added testing for helpers.
+# Calculator v1.2.5: Finished alpha testing functionality.
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
