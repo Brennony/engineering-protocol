@@ -52,6 +52,6 @@ Enter number 2: 5
 
 ## Version
 
-**v1.2.3 — Calculator with Libraries**
+**v1.2.3 — Calculator with Libraries + Quadratics**
 
 Built as part of my Python learning journey and Engineering Protocol.

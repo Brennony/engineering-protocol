@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.2.3  |  8/16/2026
+# Brennon York  |  Calculator v1.2.4  |  8/16/2026
 
-# Calculator v1.2.3: Updated Algebra script with quadratics and reformatted sorting inputs.
+# Calculator v1.2.4: __name__ == "__main__" functionality, added testing for helpers.
 
 # This Build is finally getting somewhere!
 # Eventually I want to make a GUI for this calculator, but for now this is a good start
@@ -242,4 +242,5 @@ def doAlgebra(operation, variables):
     print("=====================================\n")
 
 # Performing Main
-main()
+if __name__ == "__main__":
+    main()

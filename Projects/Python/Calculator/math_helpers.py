@@ -3,8 +3,8 @@
 from math import sqrt, floor, ceil 
 
 # -- Basic Calculator Functions --
-## Functions with One Variable:
 
+## Functions with One Variable:
 def sqrtRoot(num1):
     return sqrt(num1)
 
