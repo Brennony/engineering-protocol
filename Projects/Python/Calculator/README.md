@@ -52,6 +52,6 @@ Enter number 2: 5
 
 ## Version
 
-**v1.2.3 — Calculator with Libraries + Quadratics**
+**v1.2.4 — Calculator updated with testing and __name__ = "__main__"**
 
 Built as part of my Python learning journey and Engineering Protocol.
