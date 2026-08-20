@@ -1,4 +1,4 @@
-# Brennon York  |  Calculator v1.3  |  8/20/2026
+# Brennon York  |  Calculator v1.3  |  8/19/2026
 
 # Massive updates to Calculator Program! Version 1.3 is complete! 
 # -Fully testing for available functions 
