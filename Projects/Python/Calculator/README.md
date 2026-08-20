@@ -1,57 +1,74 @@
 # Python Calculator
 
-## Description
+**Brennon York | Calculator Project**
 
-A simple command-line calculator built in Python. The program allows users to perform basic mathematical operations while validating user input and handling errors such as division by zero.
+A modular Python calculator built from the ground up to practice Python programming, mathematical logic, abstraction, testing, and software engineering principles.
+
+---
+
+## Current Version
+
+**Calculator v1.3**
+
+The calculator currently supports basic mathematical operations, algebraic functions, input validation, helper modules, and automated testing with `pytest`.
+
+---
 
 ## Features
 
-* Addition
-* Subtraction
-* Multiplication
-* Division
-* Modulo
-* Input validation for numerical values
-* Operation validation
-* Division-by-zero protection
-* Option to perform multiple calculations in one session
+### Basic Mathematics
 
-## What I Learned
+- Addition
+- Subtraction
+- Multiplication
+- Division
+- Remainder / Modulo
+- Exponents
+- Square roots
+- Nth roots
+- Floor
+- Ceiling
+- Absolute value
+- Logarithms
 
-This project helped me practice:
+### Algebra
 
-* Variables and data types
-* Functions
-* `while` loops
-* `for` loops
-* Conditional statements
-* User input
-* `try` / `except` error handling
-* `float()` conversion
-* Lists
-* Returning values from functions
-* Basic mathematical operators
-* Input validation
+- Slope
+- Midpoint
+- Distance between two points
+- X-intercept
+- Y-intercept
+- Quadratic equations
+- Quadratic roots
+- Repeated quadratic roots
+- Detection of quadratics with no real roots
 
-## Project Structure
+### Input Validation
+
+The calculator includes validation for mathematically invalid inputs, including:
+
+- Division by zero
+- Remainder by zero
+- Square roots of negative numbers
+- Zero as an nth-root index
+- Invalid logarithm values
+- Invalid logarithm bases
+- Vertical lines with undefined slopes
+- Invalid quadratic equations where `a = 0`
+
+### Modular Architecture
+
+The calculator is separated into multiple modules:
 
 ```text
-Calculator/
-└── calculator.py
-```
-
-## Example
-
-```text
-Enter operation (+, -, *, /, %): *
-Enter number 1: 12
-Enter number 2: 5
-
-12.0 * 5.0 = 60.0
-```
-
-## Version
-
-**v1.2.5 — Finished alpha testing functionality**
-
-Built as part of my Python learning journey and Engineering Protocol.
+Calculator
+│
+├── calculator.py
+│
+├── math_helpers.py
+│
+├── algebra_helpers.py
+│
+└── tests/
+    ├── test_math_helpers.py
+    └── test_algebra_helpers.py
