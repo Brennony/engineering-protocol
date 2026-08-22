@@ -8,7 +8,7 @@ A modular Python calculator built from the ground up to practice Python programm
 
 ## Current Version
 
-**Calculator v1.3**
+**Calculator v1.3.1 - Implemented More Algebra Functions**
 
 The calculator currently supports basic mathematical operations, algebraic functions, input validation, helper modules, and automated testing with `pytest`.
 
