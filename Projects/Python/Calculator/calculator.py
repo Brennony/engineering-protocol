@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.3.1  |  8/21/2026
+# Brennon York  |  Calculator v1.3.2  |  8/22/2026
 
-# 1.3.1 - Implemented extra Algebra functions
+# 1.3.2 - Fully wired all Algebra functions and accounted for Edge-cases
 
 # Massive updates to Calculator Program! Version 1.3 is complete! 
 # -Fully testing for available functions 
@@ -254,10 +254,17 @@ def sortAlgebra(variables, operation):
     elif operation == "quad":
         if variables[0] == 0:
             print("=====================================")
-            print("The quadratic is invalid because a cannot be 0.")
+            print("The quadratic is invalid because 'a' cannot be 0.")
             print("=====================================\n")
             return True
 
+    elif operation == "xIntercept":
+        if variables[0] == 0:
+            print("=====================================")
+            print("There is no xIntercept because 'a' cannot be 0.")
+            print("=====================================\n")
+            return True
+    
     return False
 
 
@@ -294,13 +301,13 @@ def doBasic(operation, variables):
 
 def doAlgebra(operation, variables):
 
-    TWO_POINT_OPS = {
+    ALGEBRA_OPS = {
         "slope": algebra_helpers.slope,
         "midpoint": algebra_helpers.midpoint,
         "distance": algebra_helpers.distance
     }
 
-    function = TWO_POINT_OPS.get(operation)
+    function = ALGEBRA_OPS.get(operation)
 
     if function is None:
 
@@ -329,8 +336,12 @@ def doAlgebra(operation, variables):
     else:
         x1, y1 = variables[0]
         x2, y2 = variables[1]
-        answer = function(x1,y1,x2,y2)
-        answers = [answer]
+        if operation in ("distance","slope"):
+            answer = function(x1,y1,x2,y2)
+            answers = [answer]
+        else:
+            answer1, answer2 = function(x1,y1,x2,y2)
+            answers = [answer1, answer2]
 
     printAlgebra(operation, variables, answers)
 
@@ -383,7 +394,6 @@ def printAlgebra(operation, variables, answers):
     print("=====================================")
 
     if operation == "slope":
-
         x1, y1 = variables[0]
         x2, y2 = variables[1]
 
@@ -398,7 +408,7 @@ def printAlgebra(operation, variables, answers):
 
         print(
             f"The midpoint of ({x1}, {y1}) and "
-            f"({x2}, {y2}) = {answers}"
+            f"({x2}, {y2}) = ({answers[0]}, {answers[1]})"
         )
 
     elif operation == "distance":
@@ -407,11 +417,10 @@ def printAlgebra(operation, variables, answers):
 
         print(
             f"The distance between ({x1}, {y1}) and "
-            f"({x2}, {y2}) = {answers}"
+            f"({x2}, {y2}) = {answers[0]}"
         )
 
     elif operation == "quad":
-
         a, b, c = variables
         answer1, answer2 = answers
 
@@ -422,15 +431,15 @@ def printAlgebra(operation, variables, answers):
             )
             print(f"  x₁ = {answer1}")
             print(f"  x₂ = {answer2}")
-
         else:
             print("The quadratic has no real roots.")
 
     elif operation == "xIntercept":
         a, b = variables
 
-        print(f"The xIntercept of {a} and {b} is: ")
-        print(f"{answers}")
+        if answers is not None:
+            print(f"The xIntercept of {a} and {b} is: ")
+            print(f"{answers[0]}")
 
     else:
         x1, y1 = variables[0]
@@ -438,7 +447,7 @@ def printAlgebra(operation, variables, answers):
 
         print(
             f"The yIntercept of ({x1}, {y1}) and "
-            f"{a} = {answers}"
+            f"{a} = {answers[0]}"
         )
 
 
