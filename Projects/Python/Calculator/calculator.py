@@ -1,6 +1,6 @@
-# Brennon York  |  Calculator v1.3.2  |  8/22/2026
+# Brennon York  |  Calculator v1.3.3  |  8/26/2026
 
-# 1.3.2 - Fully wired all Algebra functions and accounted for Edge-cases
+# 1.3.3 - Wired rudimentary Trig cases (no pi functionality yet)
 
 # Massive updates to Calculator Program! Version 1.3 is complete! 
 # -Fully testing for available functions 
@@ -14,6 +14,7 @@
 
 import math_helpers
 import algebra_helpers
+import trig_helpers
 
 
 
@@ -40,6 +41,25 @@ def main():
             variables = getAlgebraVar(operation)
             if not sortAlgebra(variables, operation):
                 doAlgebra(operation, variables)
+
+        elif choice == 3:
+            operation = getTrig()
+            mode = SETTINGS["angle_mode"]
+            variables = getTrigVar(mode)
+            if not sortTrig():     # False for now
+                doTrig(operation, variables, mode)
+
+
+        elif choice == 4:
+            getSettings()
+
+
+
+# Settings Dictionary
+
+SETTINGS = {
+    "angle_mode": "radians"
+}
 
 
 # Operation Definitions
@@ -72,6 +92,17 @@ ALGEBRA_SPECS = {
     "xIntercept": {"points": 0, "numbers": 2},
     "yIntercept": {"points": 1, "numbers": 1}
 }
+TRIG_SPECS = {
+    "sin",
+    "cos",
+    "tan",
+    "sec",
+    "csc",
+    "cot",
+    "arcsin",
+    "arccos",
+    "arctan"
+}
 
 
 # Function Selection
@@ -82,16 +113,42 @@ def getFunction():
     print("0. Quit Program")
     print("1. Basic Operations")
     print("2. Algebraic Operations")
+    print("3. Trigonometry Operations")
+    print("4. Settings")
     print("=====================================\n")
 
     while True:
         function = input("Select a function: ")
 
-        if function in ("0", "1", "2"):
+        if function in ("0", "1", "2",  "3", "4"):
             return int(function)
 
         print("Please select a valid function.")
 
+
+# Settings Select
+
+def getSettings():
+    global SETTINGS
+
+    while True:
+        mode = SETTINGS["angle_mode"]
+        print("=====================================")
+        print("0. Quit")
+        print(f"1. Radians/Degrees: {mode}")
+        print("=====================================\n")
+        Option = input("Select a valid option: ")
+        if Option == "1":
+            if SETTINGS["angle_mode"] == "radians":
+                SETTINGS["angle_mode"] = "degrees"
+            else:
+                SETTINGS["angle_mode"] = "radians"
+        elif Option == "0":
+            break
+        else:
+            print("Please select a valid option.")
+          
+    
 
 # Basic Operations
 
@@ -111,14 +168,7 @@ def getBasic():
     print("- Ceil (ceil)")
     print("- Absolute Value (abs)")
     print("=====================================\n")
-
-    while True:
-        operation = input("Select an operation: ").strip()
-
-        if operation in BASIC_OPERATIONS:
-            return operation
-
-        print("Please select a valid operation.")
+    return checkGetOps(BASIC_OPERATIONS)
 
 
 # Algebra Operations
@@ -133,13 +183,33 @@ def getAlgebra():
     print("- xIntercept (xIntercept)")
     print("- yIntercept (yIntercept)")
     print("=====================================\n")
+    return checkGetOps(ALGEBRA_SPECS)
 
+# Trigonometry Operations
+
+def getTrig():
+    print("=====================================")
+    print("Operations:")
+    print("- Sine (sin)")
+    print("- Cosine (cos)")
+    print("- Tangent (tan)")
+    print("- Secant (sec)")
+    print("- Cosecant (csc)")
+    print("- Cotangent (cot)")
+    print("- Arc Sine (arcsin)")
+    print("- Arc Cosine (arccos)")
+    print("- Arc Tangent (arctan)")
+    print("=====================================\n")
+    return checkGetOps(TRIG_SPECS)
+
+
+# Check Operations
+
+def checkGetOps(Dict):
     while True:
         operation = input("Select an operation: ").strip()
-
-        if operation in ALGEBRA_SPECS:
-            return operation
-
+        if operation in Dict:
+            return operation 
         print("Please select a valid operation.")
 
 
@@ -147,12 +217,10 @@ def getAlgebra():
 
 def getBasicVar(amount):
     numbers = []
-    
     for i in range(amount):
         numbers.append(
             getNumber(f"Enter number {i + 1}: ")
         )
-
     return numbers
 
 
@@ -164,13 +232,21 @@ def getAlgebraVar(operation):
         x = getNumber(f"Enter a number for x{i + 1}: ")
         y = getNumber(f"Enter a number for y{i + 1}: ")
         numbers.append([x,y])
-    
+
     for i in range(spec["numbers"]):
         numbers.append(
             getNumber(f"Enter Number {i+1}: ")
         )
-
     return numbers
+
+
+def getTrigVar(mode):
+    numbers = []
+    numbers.append(
+        getNumber(f"Enter a number in {mode}: ")
+    )
+    return numbers
+
 
 def getNumber(prompt):
     while True:
@@ -268,6 +344,10 @@ def sortAlgebra(variables, operation):
     return False
 
 
+def sortTrig():
+    return False
+
+
 # Basic Calculations
 
 def doBasic(operation, variables):
@@ -346,6 +426,32 @@ def doAlgebra(operation, variables):
     printAlgebra(operation, variables, answers)
 
 
+# Trigonometry Calculations
+
+def doTrig(operation, variables, mode):
+    operations = {
+            "sin": trig_helpers.sine,
+            "cos": trig_helpers.cosine,
+            "tan": trig_helpers.tang,
+            "sec": trig_helpers.sec,
+            "csc": trig_helpers.csc,
+            "cot": trig_helpers.cot,
+            "arcsin": trig_helpers.arcsin,
+            "arccos": trig_helpers.arccos,
+            "arctan": trig_helpers.arctan
+        }
+    
+    if mode == "degrees":
+        variables[0] = trig_helpers.degRads(variables[0])
+    
+    function = operations.get(operation)
+    if function is None:
+        return
+    answer = function(variables[0])
+
+    printTrig(operation, variables, answer)
+
+
 # Basic Output
 
 def printBasic(operation, variables, answer):
@@ -388,8 +494,6 @@ def printBasic(operation, variables, answer):
 # Algebra Output
 
 def printAlgebra(operation, variables, answers):
-
-    # Will handle edge cases tomorrow
 
     print("=====================================")
 
@@ -450,6 +554,20 @@ def printAlgebra(operation, variables, answers):
             f"{a} = {answers[0]}"
         )
 
+
+    print("=====================================\n")
+
+
+# Trigonometry Output
+
+def printTrig(operation, variables, answer):
+
+    print("=====================================")
+
+    if answer is None:
+        print(f"The {operation}({variables[0]}) is undefined.")
+    else:
+        print(f"The {operation}({variables[0]}) = {answer}")
 
     print("=====================================\n")
 
