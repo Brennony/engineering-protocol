@@ -1,17 +1,13 @@
-# Brennon York  |  Calculator v1.3.3  |  8/26/2026
-
-# 1.3.3 - Wired rudimentary Trig cases (no pi functionality yet)
-
-# Massive updates to Calculator Program! Version 1.3 is complete! 
-# -Fully testing for available functions 
-# -Added Algebra functions and Basic functions
-# -Easier-to-use terminal interface 
-# -Cleaner code in general
-
-# Next up, Trignometric functions, basic Calculus capabilities, and then build Calculator v1.4 will be finished!
+# Brennon York  |  Calculator v1.3.4  |  8/27/2026
 
 
+# 1.3.4 - Implement Constant Function for all functions (pi,e,tau)
 
+# Slight change of plans! I will come back to calculus in version 1.5, and also will go for regular expressions and multiple operations all in one.
+# Note To Self: Mess with cotangent testing tomorrow
+
+
+from math import pi, e, tau, isclose
 import math_helpers
 import algebra_helpers
 import trig_helpers
@@ -53,6 +49,19 @@ def main():
         elif choice == 4:
             getSettings()
 
+
+# Constants Dictionary
+
+CONSTANTS = {
+    "pi": pi,
+    "e": e,
+    "tau": tau
+}
+DISPLAY_NAMES = {
+    3.141592653589793: "π",
+    2.718281828459045: "e",
+    6.283185307179586: "τ"
+}
 
 
 # Settings Dictionary
@@ -251,7 +260,10 @@ def getTrigVar(mode):
 def getNumber(prompt):
     while True:
         try:
-            return float(input(prompt))
+            raw = input(prompt).strip().lower()
+            if raw in CONSTANTS:
+                return CONSTANTS[raw]
+            return float(raw)
         except ValueError:
             print("Please enter a valid number.")
 
@@ -452,6 +464,22 @@ def doTrig(operation, variables, mode):
     printTrig(operation, variables, answer)
 
 
+# Format Operations
+
+def formatNum(value):
+    if not isinstance(value, float):
+        return value
+    if isclose(value, 0, abs_tol=1e-9):
+        return 0
+    rounded = round(value)
+    if isclose(value, rounded, rel_tol=1e-9):
+        return rounded
+    for const, symbol in DISPLAY_NAMES.items():
+        if isclose(value, const, rel_tol=1e-9):
+            return symbol
+    return value
+
+
 # Basic Output
 
 def printBasic(operation, variables, answer):
@@ -459,33 +487,33 @@ def printBasic(operation, variables, answer):
     print("=====================================")
 
     if operation == "sqrt":
-        print(f"sqrt value of {variables[0]} is {answer}")
+        print(f"sqrt value of {formatNum(variables[0])} is {formatNum(answer)}")
 
     elif operation == "abs":
-        print(f"Absolute value of {variables[0]} is {answer}")
+        print(f"Absolute value of {formatNum(variables[0])} is {formatNum(answer)}")
 
     elif operation == "flr":
-        print(f"{variables[0]} floored is {answer}")
+        print(f"{formatNum(variables[0])} floored is {formatNum(answer)}")
 
     elif operation == "ceil":
-        print(f"{variables[0]} ceiled is {answer}")
+        print(f"{formatNum(variables[0])} ceiled is {formatNum(answer)}")
 
     elif operation == "root":
         print(
-            f"The {variables[1]}th root of "
-            f"{variables[0]} = {answer}"
+            f"The {formatNum(variables[1])}th root of "
+            f"{formatNum(variables[0])} = {formatNum(answer)}"
         )
 
     elif operation == "log":
         print(
-            f"The log base {variables[1]} "
-            f"of {variables[0]} = {answer}"
+            f"The log base {formatNum(variables[1])} "
+            f"of {formatNum(variables[0])} = {formatNum(answer)}"
         )
 
     else:
         print(
-            f"{variables[0]} {operation} "
-            f"{variables[1]} = {answer}"
+            f"{formatNum(variables[0])} {operation} "
+            f"{formatNum(variables[1])} = {formatNum(answer)}"
         )
 
     print("=====================================\n")
@@ -502,8 +530,8 @@ def printAlgebra(operation, variables, answers):
         x2, y2 = variables[1]
 
         print(
-            f"The slope of ({x1}, {y1}) and "
-            f"({x2}, {y2}) = {answers[0]}"
+            f"The slope of ({formatNum(x1)}, {formatNum(y1)}) and "
+            f"({formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
         )
 
     elif operation == "midpoint":
@@ -511,8 +539,8 @@ def printAlgebra(operation, variables, answers):
         x2, y2 = variables[1]
 
         print(
-            f"The midpoint of ({x1}, {y1}) and "
-            f"({x2}, {y2}) = ({answers[0]}, {answers[1]})"
+            f"The midpoint of ({formatNum(x1)}, {formatNum(y1)}) and "
+            f"({formatNum(x2)}, {formatNum(y2)}) = ({formatNum(answers[0])}, {formatNum(answers[1])})"
         )
 
     elif operation == "distance":
@@ -520,8 +548,8 @@ def printAlgebra(operation, variables, answers):
         x2, y2 = variables[1]
 
         print(
-            f"The distance between ({x1}, {y1}) and "
-            f"({x2}, {y2}) = {answers[0]}"
+            f"The distance between ({formatNum(x1)}, {formatNum(y1)}) and "
+            f"({formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
         )
 
     elif operation == "quad":
@@ -531,10 +559,10 @@ def printAlgebra(operation, variables, answers):
         if answer1 is not None and answer2 is not None:
             print(
                 f"The roots of "
-                f"{a}x^2 + {b}x + {c} = 0:"
+                f"{formatNum(a)}x^2 + {formatNum(b)}x + {formatNum(c)} = 0:"
             )
-            print(f"  x₁ = {answer1}")
-            print(f"  x₂ = {answer2}")
+            print(f"  x₁ = {formatNum(answer1)}")
+            print(f"  x₂ = {formatNum(answer2)}")
         else:
             print("The quadratic has no real roots.")
 
@@ -542,16 +570,16 @@ def printAlgebra(operation, variables, answers):
         a, b = variables
 
         if answers is not None:
-            print(f"The xIntercept of {a} and {b} is: ")
-            print(f"{answers[0]}")
+            print(f"The xIntercept of {formatNum(a)} and {formatNum(b)} is: ")
+            print(f"{formatNum(answers[0])}")
 
     else:
         x1, y1 = variables[0]
         a = variables[1]
 
         print(
-            f"The yIntercept of ({x1}, {y1}) and "
-            f"{a} = {answers[0]}"
+            f"The yIntercept of ({formatNum(x1)}, {formatNum(y1)}) and "
+            f"{formatNum(a)} = {formatNum(answers[0])}"
         )
 
 
@@ -565,9 +593,9 @@ def printTrig(operation, variables, answer):
     print("=====================================")
 
     if answer is None:
-        print(f"The {operation}({variables[0]}) is undefined.")
+        print(f"The {operation}({formatNum(variables[0])}) is undefined.")
     else:
-        print(f"The {operation}({variables[0]}) = {answer}")
+        print(f"The {operation}({formatNum(variables[0])}) = {formatNum(answer)}")
 
     print("=====================================\n")
 

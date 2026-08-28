@@ -8,7 +8,7 @@ A modular Python calculator built from the ground up to practice Python programm
 
 ## Current Version
 
-**Calculator v1.3.3 - Rudimenatry implementation of Trigonometric Functions (no pi functionality yet)**
+**Calculator V1.3.4 - Implement Constant Function for all functions (pi,e,tau)**
 
 The calculator currently supports basic mathematical operations, algebraic functions, input validation, helper modules, and automated testing with `pytest`.
 
