@@ -1,4 +1,4 @@
-# Brennon York  |  Test Trigonometry Helpers v1  |  8/24/2026
+# Brennon York  |  Test Trigonometry Helpers v1  |  8/29/2026
 
 import trig_helpers
 from math import pi, isclose
@@ -33,5 +33,6 @@ def test_sec():
     assert trig_helpers.sec(pi/2) is None
 
 def test_cot():
-    assert isclose(trig_helpers.tang(pi/2), 0, abs_tol=1e-9)
+    assert isclose(trig_helpers.tang(pi/4), 1, abs_tol=1e-9)
     assert trig_helpers.cot(0) is None
+    assert trig_helpers.cot(pi) is None

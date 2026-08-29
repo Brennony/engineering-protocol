@@ -1,4 +1,4 @@
-# Brennon York  |  Trigonometry Helpers v1  |  8/24/2026
+# Brennon York  |  Trigonometry Helpers v1.2  |  8/29/2026
 
 import math
 
@@ -35,6 +35,8 @@ def sec(x):
     return (1/cosine(x))
 
 def cot(x):
+    if math.isclose(sine(x), 0, abs_tol=1e-9):
+        return None
     t = tang(x)
     if t is None or t == 0:
         return None

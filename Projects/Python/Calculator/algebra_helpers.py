@@ -1,4 +1,4 @@
-# Brennon York  |  Algebra Helpers v1.3  |  8/19/2026
+# Brennon York  |  Algebra Helpers v1.3  |  8/29/2026
 
 from math_helpers import sqrtRoot
 

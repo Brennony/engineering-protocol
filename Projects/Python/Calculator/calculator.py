@@ -1,10 +1,9 @@
-# Brennon York  |  Calculator v1.3.4  |  8/27/2026
+# Brennon York  |  Calculator v1.4  |  8/29/2026
 
 
-# 1.3.4 - Implement Constant Function for all functions (pi,e,tau)
+# 1.4 - Calculator 1.4: Completed with Basic Functions, Trig Functions, and Algebra Functions. Also contains history reader/caller and constants.
+# Next version: 1.5 will be focused on handling Calculus. Future 2.0 will be built into a GUI. 
 
-# Slight change of plans! I will come back to calculus in version 1.5, and also will go for regular expressions and multiple operations all in one.
-# Note To Self: Mess with cotangent testing tomorrow
 
 
 from math import pi, e, tau, isclose
@@ -50,6 +49,7 @@ def main():
             getSettings()
 
 
+
 # Constants Dictionary
 
 CONSTANTS = {
@@ -69,6 +69,11 @@ DISPLAY_NAMES = {
 SETTINGS = {
     "angle_mode": "radians"
 }
+
+# History
+
+HISTORY = []
+LAST_ANSWER = None
 
 
 # Operation Definitions
@@ -145,6 +150,7 @@ def getSettings():
         print("=====================================")
         print("0. Quit")
         print(f"1. Radians/Degrees: {mode}")
+        print("2. History")
         print("=====================================\n")
         Option = input("Select a valid option: ")
         if Option == "1":
@@ -155,7 +161,7 @@ def getSettings():
         elif Option == "0":
             break
         else:
-            print("Please select a valid option.")
+            printHistory()
           
     
 
@@ -263,6 +269,11 @@ def getNumber(prompt):
             raw = input(prompt).strip().lower()
             if raw in CONSTANTS:
                 return CONSTANTS[raw]
+            if raw == "ans":
+                if LAST_ANSWER is not None:
+                    return LAST_ANSWER
+                print("No previous answer available.")
+                continue
             return float(raw)
         except ValueError:
             print("Please enter a valid number.")
@@ -386,6 +397,7 @@ def doBasic(operation, variables):
 
     answer = function(*variables)
 
+    addLast(answer)
     printBasic(operation, variables, answer)
 
 
@@ -435,6 +447,11 @@ def doAlgebra(operation, variables):
             answer1, answer2 = function(x1,y1,x2,y2)
             answers = [answer1, answer2]
 
+    if operation == "quad" and answer1 is not None and answer2 is not None:
+        choice = input("Which answer to save as 'ans'? (1 or 2): ").strip()
+        addLast(answer2 if choice == "2" else answer1)
+    else:
+        addLast(answers[0])
     printAlgebra(operation, variables, answers)
 
 
@@ -461,6 +478,7 @@ def doTrig(operation, variables, mode):
         return
     answer = function(variables[0])
 
+    addLast(answer)
     printTrig(operation, variables, answer)
 
 
@@ -483,122 +501,95 @@ def formatNum(value):
 # Basic Output
 
 def printBasic(operation, variables, answer):
-
-    print("=====================================")
-
     if operation == "sqrt":
-        print(f"sqrt value of {formatNum(variables[0])} is {formatNum(answer)}")
-
+        result = f"sqrt({formatNum(variables[0])}) = {formatNum(answer)}"
     elif operation == "abs":
-        print(f"Absolute value of {formatNum(variables[0])} is {formatNum(answer)}")
-
+        result = f"abs({formatNum(variables[0])}) = {formatNum(answer)}"
     elif operation == "flr":
-        print(f"{formatNum(variables[0])} floored is {formatNum(answer)}")
-
+        result = f"floor({formatNum(variables[0])}) = {formatNum(answer)}"
     elif operation == "ceil":
-        print(f"{formatNum(variables[0])} ceiled is {formatNum(answer)}")
-
+        result = f"ceil({formatNum(variables[0])}) = {formatNum(answer)}"
     elif operation == "root":
-        print(
-            f"The {formatNum(variables[1])}th root of "
-            f"{formatNum(variables[0])} = {formatNum(answer)}"
-        )
-
+        result = f"{formatNum(variables[1])}th root of {formatNum(variables[0])} = {formatNum(answer)}"
     elif operation == "log":
-        print(
-            f"The log base {formatNum(variables[1])} "
-            f"of {formatNum(variables[0])} = {formatNum(answer)}"
-        )
-
+        result = f"log base {formatNum(variables[1])} of {formatNum(variables[0])} = {formatNum(answer)}"
     else:
-        print(
-            f"{formatNum(variables[0])} {operation} "
-            f"{formatNum(variables[1])} = {formatNum(answer)}"
-        )
+        result = f"{formatNum(variables[0])} {operation} {formatNum(variables[1])} = {formatNum(answer)}"
 
-    print("=====================================\n")
+    print(f"=====================================\n{result}\n=====================================\n")
+    addHistory(result)
 
-
-# Algebra Output
 
 def printAlgebra(operation, variables, answers):
-
-    print("=====================================")
-
     if operation == "slope":
         x1, y1 = variables[0]
         x2, y2 = variables[1]
-
-        print(
-            f"The slope of ({formatNum(x1)}, {formatNum(y1)}) and "
-            f"({formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
-        )
+        result = f"slope({formatNum(x1)}, {formatNum(y1)}, {formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
 
     elif operation == "midpoint":
         x1, y1 = variables[0]
         x2, y2 = variables[1]
-
-        print(
-            f"The midpoint of ({formatNum(x1)}, {formatNum(y1)}) and "
-            f"({formatNum(x2)}, {formatNum(y2)}) = ({formatNum(answers[0])}, {formatNum(answers[1])})"
-        )
+        result = f"midpoint({formatNum(x1)}, {formatNum(y1)}, {formatNum(x2)}, {formatNum(y2)}) = ({formatNum(answers[0])}, {formatNum(answers[1])})"
 
     elif operation == "distance":
         x1, y1 = variables[0]
         x2, y2 = variables[1]
-
-        print(
-            f"The distance between ({formatNum(x1)}, {formatNum(y1)}) and "
-            f"({formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
-        )
+        result = f"distance({formatNum(x1)}, {formatNum(y1)}, {formatNum(x2)}, {formatNum(y2)}) = {formatNum(answers[0])}"
 
     elif operation == "quad":
         a, b, c = variables
         answer1, answer2 = answers
-
         if answer1 is not None and answer2 is not None:
-            print(
-                f"The roots of "
-                f"{formatNum(a)}x^2 + {formatNum(b)}x + {formatNum(c)} = 0:"
-            )
-            print(f"  x₁ = {formatNum(answer1)}")
-            print(f"  x₂ = {formatNum(answer2)}")
+            result = f"{formatNum(a)}x^2 + {formatNum(b)}x + {formatNum(c)} = 0: x₁={formatNum(answer1)}, x₂={formatNum(answer2)}"
         else:
-            print("The quadratic has no real roots.")
+            result = f"{formatNum(a)}x^2 + {formatNum(b)}x + {formatNum(c)} = 0: no real roots"
 
     elif operation == "xIntercept":
         a, b = variables
-
-        if answers is not None:
-            print(f"The xIntercept of {formatNum(a)} and {formatNum(b)} is: ")
-            print(f"{formatNum(answers[0])}")
+        result = f"xIntercept({formatNum(a)}, {formatNum(b)}) = {formatNum(answers[0])}"
 
     else:
         x1, y1 = variables[0]
         a = variables[1]
+        result = f"yIntercept({formatNum(x1)}, {formatNum(y1)}, slope={formatNum(a)}) = {formatNum(answers[0])}"
 
-        print(
-            f"The yIntercept of ({formatNum(x1)}, {formatNum(y1)}) and "
-            f"{formatNum(a)} = {formatNum(answers[0])}"
-        )
+    print(f"=====================================\n{result}\n=====================================\n")
+    addHistory(result)
 
-
-    print("=====================================\n")
-
-
-# Trigonometry Output
 
 def printTrig(operation, variables, answer):
-
-    print("=====================================")
-
     if answer is None:
-        print(f"The {operation}({formatNum(variables[0])}) is undefined.")
+        result = f"{operation}({formatNum(variables[0])}) = undefined"
     else:
-        print(f"The {operation}({formatNum(variables[0])}) = {formatNum(answer)}")
+        result = f"{operation}({formatNum(variables[0])}) = {formatNum(answer)}"
 
+    print(f"=====================================\n{result}\n=====================================\n")
+    addHistory(result)
+
+
+# Add History
+
+def addHistory(hisentry):
+    if len(HISTORY) >= 100:
+        HISTORY.pop(0)
+    HISTORY.append(f"Entry {len(HISTORY)+1}: {hisentry}")
+
+
+# Print History
+
+def printHistory():
+    print("\n===============History===============")
+    try:
+        HISTORY[0]
+    except IndexError:
+        print("       There is no history yet       ")
+    else: 
+        print(*HISTORY, sep='\n')
     print("=====================================\n")
 
+def addLast(answer):
+    global LAST_ANSWER
+    LAST_ANSWER = answer
 
 # Run Program
 
