@@ -16,7 +16,7 @@ import trig_helpers
 # Main Program
 
 def main():
-    print("=====  PYTHON CALCULATOR V1.3  ======\n")
+    print("=====  PYTHON CALCULATOR V1.4  ======\n")
 
     while True:
         choice = getFunction()
