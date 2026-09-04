@@ -1,8 +1,10 @@
 class Student:
+    count = 0
     def __init__(self,name,age,gpa):
         self.name = name
         self.age = age
         self.gpa = gpa
+        Student.count += 1
 
     def __str__(self):
         return f"Name: {self.name} | Age: {self.age} | GPA: {self.gpa}"
@@ -34,6 +36,7 @@ class Classroom:
 
     def display_all(self):
         print("=====Classroom=1=====")
+        print(f"Amount of students in class: {Student.count}")
         for student in self.students:
             print(student)
 
