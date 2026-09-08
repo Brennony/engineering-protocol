@@ -1,8 +1,266 @@
-# Brennon York  |  Student Record v2.2 |  8/7/2026
+# Brennon York  |  Student Record v2.3 |  9/8/2026
 
-# Version 2.2: File Loading, Deleting Users, Adding, etc.. Making great progress.
+# Versions 2.3: Began adding Regular Expressions
+
 
 import csv
+import re
+
+
+class Employment:
+    _PATTERN = re.compile(
+        r'^(?P<title>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<company>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<start>(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\d{4}),\s*'
+        r'(?P<end>(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\d{4})$'
+    )
+    _PATTERN2 = re.compile(
+        r'^(?P<title>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<company>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<start>(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\d{4}),\s*'
+        r'(?P<end>Present)$'
+    )
+
+    def __init__(self, title, company, start, end):
+        self.title = title
+        self.company = company
+        self.start = start
+        self.end = end
+
+    @classmethod
+    def from_string(cls, text):
+        match = cls._PATTERN.match(text) or cls._PATTERN2.match(text)
+        if not match:
+            raise ValueError(
+                f"Invalid Work Experience Format: {text!r}. "
+                "Expected: 'Job Title, Company, MonthYr, MonthYr' or "
+                "'Job Title, Company, MonthYr, Present'... "
+                "(e.g. 'Software Engineer, Google, Jan2024, Mar2025')."
+            )
+        return cls(**match.groupdict())
+
+    def __str__(self):
+        return f"{self.title} at {self.company} ({self.start} - {self.end})"
+
+
+class Volunteering:
+    _PATTERN = re.compile(
+        r'^(?P<title>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<organization>[A-Za-z0-9&.\'\- ]+),\s*'
+        r'(?P<hours>\d{1,4})$'
+    )
+
+    def __init__(self, title, organization, hours):
+        self.title = title
+        self.organization = organization
+        self.hours = hours
+
+    @classmethod
+    def from_string(cls, text):
+        match = cls._PATTERN.match(text)
+        if not match:
+            raise ValueError(
+                f"Invalid Volunteer Work Format: {text!r}. "
+                "Expected: 'Volunteer Title, Organization/Company, Hours Worked'... "
+                "(e.g. 'Chef, NY Homeless Shelter, 225')"
+            )
+        return cls(**match.groupdict())
+
+    def __str__(self):
+        return f"{self.title} at {self.organization} (Hours: {self.hours})"
+
+
+class Skills:
+    _PATTERN = re.compile(r'^(?:\w+\s?){1,5}$')
+
+    def __init__(self, skill):
+        self.skill = skill
+
+    @classmethod
+    def from_string(cls, text):
+        if not cls._PATTERN.match(text):
+            raise ValueError(
+                f"Invalid Skill format: {text!r}. "
+                "Skills must be 1 to 5 words long for them to be recorded."
+            )
+        return cls(text.strip())
+
+    def __str__(self):
+        return self.skill
+
+
+class Student:
+    count = 0
+
+    # Initialization of Class Student
+    def __init__(self,name,age,major,gpa,bio="",
+                 work_experience=None,volunteer_work=None,
+                 skills=None,current_employment=""):
+        self.name = name
+        self.age = age
+        self.major = major
+        self.gpa = gpa
+        self.bio = bio
+        self.work_experience = work_experience
+        self.volunteer_work = volunteer_work
+        self.skills = skills
+        self.current_employment = current_employment
+        Student.count += 1
+
+
+    # ----Properties of Class Student----
+    # Properties of Name
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        if len(value) <= 50:
+            self.__name = value 
+        else:
+            raise ValueError("Name length must be between 0-50 chars.")
+
+    # Properties of Age
+    @property
+    def age(self):
+        return self.__age
+
+    @age.setter
+    def age(self, value):
+        if 5 <= value <= 120:
+            self.__age = value
+        else:
+            raise ValueError("Age must be between 5-120.")
+
+    # Properties of Major
+    @property
+    def major(self):
+        return self.__major
+
+    @major.setter
+    def major(self, value):
+        if not re.search(r'[\t\n]', value) and len(value) < 51:
+            self.__major = value
+        else:
+            raise ValueError("Major must be less than 51 chars and contain no tabs/newlines.")
+
+    # Properties of GPA
+    @property
+    def gpa(self):
+        return self.__gpa
+
+    @gpa.setter
+    def gpa(self, value):
+        if 0.0 <= value <= 4.0:
+            self.__gpa = value
+        else:
+            raise ValueError("GPA must be between 0.0 and 4.0")
+
+    # Properties of Biography
+    @property
+    def bio(self):
+        return self.__bio
+
+    @bio.setter
+    def bio(self, value):
+        if len(value) == 0 or 100 <= len(value) <= 750:
+            self.__bio = value
+        else:
+            raise ValueError("Bio must be empty, or between 100 and 750 chars.")
+
+    # Properties of Work Experience
+    @property
+    def work_experience(self):
+        return self.__work_experience
+
+    @work_experience.setter
+    def work_experience(self, value):
+        if value is None:
+            self.__work_experience = []
+            return
+        raw_entries = value if isinstance(value, list) else [value]
+        self.__work_experience = [Employment.from_string(i) for i in raw_entries]
+
+    # Properties of Volunteer Work
+    @property
+    def volunteer_work(self):
+        return self.__volunteer_work
+
+    @volunteer_work.setter
+    def volunteer_work(self, value):
+        if value is None:
+            self.__volunteer_work = []
+            return
+        raw_entries = value if isinstance(value, list) else [value]
+        self.__volunteer_work = [Volunteering.from_string(i) for i in raw_entries]
+
+    # Properties of Skills
+    @property
+    def skills(self):
+        return self.__skills
+
+    @skills.setter
+    def skills(self, value):
+        if value is None:
+            self.__skills = []
+            return
+        raw_entries = value if isinstance(value, list) else [value]
+        self.__skills = [Skills.from_string(i) for i in raw_entries]
+
+
+    # Additional Functions
+    def __str__(self):
+        return f"Name: {self.name} | Age: {self.age} | GPA: {self.gpa}"
+
+    def is_passing(self):
+        return self.gpa >= 2.0
+
+    def update_gpa(self,new_gpa):
+        self.gpa = new_gpa
+        print("GPA Changed")
+
+
+class GradStudent(Student):
+    def __init__(self, name, age, gpa, major, thesis_topic):
+        super().__init__(name,age,major,gpa)
+        self.thesis_topic = thesis_topic
+
+    def defend(self):
+        print(f"{self.name} is defending their thesis on {self.thesis_topic}")
+
+    def __str__(self):
+        return f"{super().__str__()} | Thesis: {self.thesis_topic}"
+
+
+class Classroom:
+    def __init__(self):
+        self.students = []
+
+    def add_student(self, student):
+        self.students.append(student)
+
+    def display_all(self):
+        print("=====Classroom=1=====")
+        print(f"Amount of students in class: {Student.count}")
+        for student in self.students:
+            print(student)
+
+    def class_average(self):
+        if len(self.students) == 0:
+            return "No students enrolled in class."
+        total = sum(student.gpa for student in self.students)
+        avg = total / len(self.students)
+        return f"Average Gpa: {avg:0.2f}"
+
+def askPassing(stud):
+    if stud.is_passing() == False:
+        ans = input(f"Would you like to change {stud.name}'s GPA (y/n)?: ").strip().lower()
+        if ans == "y":
+            stud.update_gpa(4.0)
+
+
+# Old Code:
 
 record = []
 
