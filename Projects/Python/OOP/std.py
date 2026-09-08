@@ -16,6 +16,41 @@ class Student:
         self.gpa = new_gpa
         print("GPA Changed")
 
+    @property
+    def gpa(self):
+        return self.__gpa
+
+    @gpa.setter
+    def gpa(self, value):
+        if 0.0 <= value <= 4.0:
+            self.__gpa = value
+        else:
+            raise ValueError("GPA must be between 0.0 and 4.0")
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        if len(value) <= 50:
+            self.__name = value 
+        else:
+            raise ValueError("Name length must be between 0-50 chars.")
+
+    @property
+    def age(self):
+        return self.__age
+
+    @age.setter
+    def age(self, value):
+        if 5 <= value <= 120:
+            self.__age = value
+        else:
+            raise ValueError("Age must be between 5-120.")
+
+        
+
 class GradStudent(Student):
     def __init__(self, name, age, gpa, thesis_topic):
         super().__init__(name,age,gpa)
@@ -56,7 +91,7 @@ def askPassing(stud):
 
 if __name__ == "__main__":
     student1 = Student("Brennon", 18, 3.5)
-    student2 = Student("Eli", 19, 1.9)
+    student2 = Student("Eli", 19, 2.5)
     student3 = GradStudent("Jacob", 22, 3.7, "Eucharistic Miracles")
     askPassing(student1), 
     askPassing(student2), 
@@ -64,6 +99,6 @@ if __name__ == "__main__":
     classroom = Classroom()
     classroom.add_student(student1), classroom.add_student(student2), classroom.add_student(student3)
     classroom.display_all()
-    student3.defend
+    student3.defend()
     print(classroom.class_average())
 
