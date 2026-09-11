@@ -2,31 +2,10 @@
 
 ## Description
 
-Student Record is a command-line Python application designed to
-store, manage, and display student information.
+New Student Record program is more of a portfolio and resume based system than the prior code. Instead of CSV capabilities, the new program uses JSON to allow for nested dictionary inputs (work experience, skills) and much longer inputs (biographies).
 
-The program allows users to:
-- Add students
-- Delete students
-- Display student information
-- List students
-- Save student data to a CSV file
-- Load existing student data when the program starts
-
-## What I Learned
-
-This project helped me practice:
-- Functions
-- Lists
-- Dictionaries
-- Loops
-- Input validation
-- Exception handling
-- File I/O
-- CSV files
-- `csv.DictReader`
-- `csv.DictWriter`
+New version is in the works and will be out soon!
 
 ## Version
 
-**v2.2 — File Loading & Persistent Storage**
+**v2.5 — Started pushing old student_record capabilities to new program**

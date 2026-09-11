@@ -1,15 +1,21 @@
-# Brennon York  |  Student Record v2.4 |  9/10/2026
+# Brennon York  |  Student Record v2.5 |  9/11/2026
 
-# Versions 2.4: Added loading student_record and more capabilities
+# Versions 2.5: Started pushing old student_record capabilities to new program
 
 import json
-import csv
 import re
 import os
+import textwrap
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(BASE_DIR, "student_record.json")
 
+
+# ==================== Record Entry Classes ====================
+# These classes represent individual entries (work, volunteering, skills)
+# that get attached to a Student. Each has a from_string() parser that
+# validates and builds an instance from a formatted input string.
 
 class Employment:
     _PATTERN = re.compile(
@@ -92,6 +98,10 @@ class Skills:
     def __str__(self):
         return self.skill
 
+
+# ==================== Core Student Classes ====================
+# Student is the main record type. GradStudent extends it with a thesis
+# topic, and Classroom holds a group of Students together.
 
 class Student:
     count = 0
@@ -213,10 +223,58 @@ class Student:
         self.__skills = [Skills.from_string(i) for i in raw_entries]
 
 
-    # Additional Functions
+    # Printing Functions
     def __str__(self):
-        return f"Name: {self.name} | Age: {self.age} | GPA: {self.gpa}"
+        return (
+            f"Name: {self.name} | Age: {self.age} | "
+            f"Major: {self.major} | GPA: {self.gpa} | "
+            f"Jobs: {len(self.work_experience)} | "
+            f"Volunteer: {len(self.volunteer_work)} | "
+            f"Skills: {len(self.skills)}"
+        )
 
+    def display(self):
+        width = max(45, len(self.name) + 10)
+
+        print("╔" + "═" * width + "╗")
+        print("║ " + self.name.center(width - 2) + " ║")
+        print("╚" + "═" * width + "╝")
+
+        status = "Passing" if self.is_passing() else "Not passing"
+        print(f"  Age: {self.age:<10} Major: {self.major}")
+        print(f"  GPA: {self.gpa:<10.2f} Status: {status}")
+
+        print("\n  ── Student Bio " + "─" * (width - 11))
+        if self.bio:
+            for line in textwrap.wrap(self.bio, width=width-4):
+                print(f"    {line}")
+        else:
+            print("    No biography provided.")
+
+        print("\n  ── Work Experience " + "─" * (width - 20))
+        if self.work_experience:
+            for job in self.work_experience:
+                print(f"    • {job}")
+        else:
+            print("    None listed")
+
+        print("\n  ── Volunteer Work " + "─" * (width - 19))
+        if self.volunteer_work:
+            for work in self.volunteer_work:
+                print(f"    • {work}")
+        else:
+            print("    None listed")
+
+        print("\n  ── Skills " + "─" * (width - 11))
+        if self.skills:
+            print("    " + ", ".join(str(s) for s in self.skills))
+        else:
+            print("    None listed")
+
+        print()
+
+
+    # Additional Functions
     def is_passing(self):
         return self.gpa >= 2.0
 
@@ -271,26 +329,88 @@ class Classroom:
         avg = total / len(self.students)
         return f"Average Gpa: {avg:0.2f}"
 
-def askPassing(stud):
-    if stud.is_passing() == False:
-        ans = input(f"Would you like to change {stud.name}'s GPA (y/n)?: ").strip().lower()
-        if ans == "y":
-            stud.update_gpa(4.0)
 
-
-
-# Main
+# ==================== Global State ====================
 
 record = []
 
-def main():
-    loadStudents()
-    student = addStudent()
-    record.append(student)
-    saveStudents()
-    for stu in record:
-        print(stu)
 
+# ==================== Menu / Interface Functions ====================
+# Handles printing the menu, reading the user's menu choice, and routing
+# that choice to the correct action.
+
+def printInterface(input):
+    width = max(45, len(input) + 10)
+    print("╔" + "═" * width + "╗")
+    print("║ " + input.center(width - 2) + " ║")
+    print("╚" + "═" * width + "╝")
+
+def printMenu():
+    printInterface("Student Record Program")
+    print("     0. Quit Program")      
+    print("     1. Student List")
+    print("     2. Display Student Info")
+    print("     3. Add Students")
+    print("     4. Delete Students")
+    print("     5. Clear Records\n\n")
+
+def menuInput():
+    while True:
+        try:
+            f = int(input("Please choose a function to perform: "))
+            if f in (0,1,2,3,4,5):
+                break 
+        except ValueError:
+            print("      ── Invalid Input ── ")
+        else: 
+            print("      ── Invalid Input ── ")
+    return f
+
+def displayInput():
+    print("1. Display all")
+    print("2. Display a student")
+    n = input("Please choose a function to perform: ").strip().lower()
+    if n == "1":
+        return 1
+    elif n == "2":
+        return 2
+    else:
+        return None
+
+def sortInput(f):
+    match f:
+        case 1:
+            listStudent()
+        case 2:
+            s = displayInput()
+            if s == 1:
+                for stu in record:
+                    stu.display()
+            elif s == 2:
+                listStudent()
+                if record:
+                    displayStu(s)
+        case 3:
+            student = addStudent()
+            record.append(student)
+            saveStudents()
+        case 4:
+            deleteStudent()
+        case 5:
+            clearRecord() 
+
+
+# ==================== Student Management Functions ====================
+# Functions that operate directly on the `record` list: listing,
+# adding, deleting, clearing, and displaying individual students.
+
+def listStudent():
+    if not record:
+        print("There are no students in directory!\n")
+    else:
+        printInterface("Students in Directory")
+        for i, student in enumerate(record, start=1):
+            print(f"    {i}. {student.name}, {student.major}")
 
 def addStudent():
     # Easy Inputs
@@ -356,6 +476,48 @@ def addStudent():
     student = Student(name,age,major,gpa,bio,work_experience,volunteer_work,skills)
     return student
 
+def deleteStudent():
+    listStudent()
+    while True:
+        if not record:
+            break
+        try:
+            choice = int(input("\n      Which student would you like to delete?: "))
+            if 1 <= choice <= len(record):
+                del record[choice - 1]
+                saveStudents()
+                print("Student deleted successfully.")
+                break
+            else:
+                print("That student number doesn't exist.")
+        except ValueError:
+            print("Please enter a valid student number.")
+
+def clearRecord():
+    n = input("Are you sure you want to clear record (y/n)?: ").strip().lower()
+    if n == "y":
+        record.clear()
+        saveStudents()
+
+def displayStu(s):
+    try:
+        n = int(input("Choose a student: "))
+        if 1 <= n <= len(record):
+            record[n - 1].display()
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def askPassing(stud):
+    if stud.is_passing() == False:
+        ans = input(f"Would you like to change {stud.name}'s GPA (y/n)?: ").strip().lower()
+        if ans == "y":
+            stud.update_gpa(4.0)
+
+
+# ==================== Persistence Functions (Save/Load) ====================
+# Reads and writes the `record` list to student_record.json.
 
 def saveStudents():
     with open(JSON_PATH, "w") as file:
@@ -376,6 +538,27 @@ def loadStudents():
         return
 
 
+# ==================== Program Entry Point ====================
+
+def main():
+    loadStudents()
+    while True:
+        printMenu()
+        f = menuInput()
+        if f == 0:
+            break
+        else:
+            sortInput(f)
+
+    """
+    saveStudents()
+    for stu in record:
+        print(stu)
+    for stu in record:
+        stu.display()
+    """
+
+
 if __name__ == "__main__":
     main()
 
@@ -383,26 +566,8 @@ if __name__ == "__main__":
 
 
 # Old Code:
-"""
-def main():
-    print("--------------------------")
-    print("--Student Record Program--")
-    print("--------------------------\n")
-    while True:
-        choice = getFunction()
-        if choice == 0:
-            break
-        elif choice == 1:
-            listStudent()
-        elif choice == 2:
-            displayStudent()
-        elif choice == 3:
-            addStudent()
-        elif choice == 4:
-            deleteStudent()
-        else:
-            break
 
+"""
 def getFunction():
     print("--------------------------")
     print("-Please select a function-")
