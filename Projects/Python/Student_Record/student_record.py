@@ -1,10 +1,14 @@
-# Brennon York  |  Student Record v2.3 |  9/8/2026
+# Brennon York  |  Student Record v2.4 |  9/10/2026
 
-# Versions 2.3: Began adding Regular Expressions
+# Versions 2.4: Added loading student_record and more capabilities
 
-
+import json
 import csv
 import re
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+JSON_PATH = os.path.join(BASE_DIR, "student_record.json")
 
 
 class Employment:
@@ -152,7 +156,7 @@ class Student:
 
     @gpa.setter
     def gpa(self, value):
-        if 0.0 <= value <= 4.0:
+        if 0.0 <= float(value) <= 4.0:
             self.__gpa = value
         else:
             raise ValueError("GPA must be between 0.0 and 4.0")
@@ -220,6 +224,20 @@ class Student:
         self.gpa = new_gpa
         print("GPA Changed")
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "age": self.age,
+            "major": self.major,
+            "gpa": self.gpa,
+            "bio": self.bio,
+            "work_experience": [f"{e.title}, {e.company}, {e.start}, {e.end}" 
+                for e in self.work_experience],
+            "volunteer_work": [f"{v.title}, {v.organization}, {v.hours}"
+                for v in self.volunteer_work],
+            "skills": [s.skill for s in self.skills],
+        }
+
 
 class GradStudent(Student):
     def __init__(self, name, age, gpa, major, thesis_topic):
@@ -260,10 +278,112 @@ def askPassing(stud):
             stud.update_gpa(4.0)
 
 
-# Old Code:
+
+# Main
 
 record = []
 
+def main():
+    loadStudents()
+    student = addStudent()
+    record.append(student)
+    saveStudents()
+    for stu in record:
+        print(stu)
+
+
+def addStudent():
+    # Easy Inputs
+    name = input("Enter student's name: ")
+    age = int(input(f"How old is {name}?: "))
+    major = input(f"What is {name}'s major?: ")
+    gpa = float(input(f"What is {name}'s GPA?: "))
+    bio = input(
+        f"Enter a biography for {name} that is between 100-750 characters"
+        "or enter nothing:\n"
+        )
+    
+    # Work Experience Input
+    while True:
+        work_experience = input(
+            "==Work Experience Format==\n"
+            "'Job Title, Company, MonthYr, Present'\n"
+            "(e.g. 'Software Engineer, Google, Jan2024, Mar2025').\n"
+            f"Please enter work experience for {name} (or press Enter to skip):\n"
+        ).strip()
+        if work_experience == "":
+            work_experience = None
+            break
+        try:
+            Employment.from_string(work_experience)
+            break
+        except ValueError as e:
+            print(f"Error: {e}\nPlease try again.\n")
+
+    # Volunteer Work Input
+    while True:
+        volunteer_work = input(
+            "==Volunteer Work Format==\n"
+            "'Volunteer Title, Organization/Company, Hours Worked'\n"
+            "(e.g. 'Chef, NY Homeless Shelter, 225')\n"
+            f"Please enter volunteer experience for {name} as shown above:\n"
+        ).strip()
+        if volunteer_work == "":
+            volunteer_work = None
+            break
+        try:
+            Volunteering.from_string(volunteer_work)
+            break
+        except ValueError as e:
+            print(f"Error: {e}\nPlease try again.\n")
+
+    # Skills Input
+    skills = []
+    while True:
+        try:
+            k = int(input("Enter number of skills to input (1-10): "))
+            if 0 < k < 11:
+                break
+        except ValueError:
+            print("Please enter a valid number.")
+        else:
+            continue
+    for _ in range(k):
+        skill = input(f"Please enter a skill that {name} has: ")
+        skills.append(skill)
+
+    # Return
+    student = Student(name,age,major,gpa,bio,work_experience,volunteer_work,skills)
+    return student
+
+
+def saveStudents():
+    with open(JSON_PATH, "w") as file:
+        json.dump([s.to_dict() for s in record], file, indent=2)
+
+def loadStudents():
+    try:
+        with open(JSON_PATH, "r") as file:
+            data = json.load(file)
+            for d in data:
+                student = Student(
+                    d["name"], d["age"], d["major"], d["gpa"],
+                    d["bio"], d["work_experience"], 
+                    d["volunteer_work"], d["skills"]
+                )
+                record.append(student)
+    except FileNotFoundError:
+        return
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+# Old Code:
+"""
 def main():
     print("--------------------------")
     print("--Student Record Program--")
@@ -401,6 +521,5 @@ def saveStudents():
             for student in record:
                 writer.writerow(student)
 
-# Run main()
-loadStudents()
-main()
+
+"""
