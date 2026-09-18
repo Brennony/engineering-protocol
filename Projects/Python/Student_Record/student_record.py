@@ -107,12 +107,13 @@ class Student:
     count = 0
 
     # Initialization of Class Student
-    def __init__(self,name,age,major,gpa,bio="",
+    def __init__(self,name,age,major,minor,gpa,bio="",
                  work_experience=None,volunteer_work=None,
                  skills=None,current_employment=""):
         self.name = name
         self.age = age
         self.major = major
+        self.minor = minor
         self.gpa = gpa
         self.bio = bio
         self.work_experience = work_experience
@@ -158,6 +159,22 @@ class Student:
             self.__major = value
         else:
             raise ValueError("Major must be less than 51 chars and contain no tabs/newlines.")
+
+    # Properties of Minor
+    @property
+    def minor(self):
+        return self.__minor
+
+    @minor.setter
+    def minor(self, value):
+        if value is None or value == "":
+            self.__minor = ""
+            return
+        else:
+            if not re.search(r'[\t\n]', value) and len(value) < 51:
+                self.__minor = value
+            else:
+                raise ValueError("Minor must be less than 51 chars and contain no tabs/newlines.")
 
     # Properties of GPA
     @property
@@ -242,9 +259,11 @@ class Student:
 
         status = "Passing" if self.is_passing() else "Not passing"
         print(f"  Age: {self.age:<10} Major: {self.major}")
+        if self.minor:
+            print(f"                  Minor: {self.minor}")
         print(f"  GPA: {self.gpa:<10.2f} Status: {status}")
 
-        print("\n  ── Student Bio " + "─" * (width - 11))
+        print("\n  ── Student Bio " + "─" * (width - 16))
         if self.bio:
             for line in textwrap.wrap(self.bio, width=width-4):
                 print(f"    {line}")
@@ -287,6 +306,7 @@ class Student:
             "name": self.name,
             "age": self.age,
             "major": self.major,
+            "minor": self.minor,
             "gpa": self.gpa,
             "bio": self.bio,
             "work_experience": [f"{e.title}, {e.company}, {e.start}, {e.end}" 
@@ -298,8 +318,12 @@ class Student:
 
 
 class GradStudent(Student):
-    def __init__(self, name, age, gpa, major, thesis_topic):
-        super().__init__(name,age,major,gpa)
+    def __init__(self, name,age,major,minor,gpa,bio,
+                 work_experience,volunteer_work,
+                 skills,current_employment,thesis_topic):
+        super().__init__(name,age,major,minor,gpa,bio,
+                         work_experience,volunteer_work,
+                         skills,current_employment)
         self.thesis_topic = thesis_topic
 
     def defend(self):
@@ -352,13 +376,14 @@ def printMenu():
     print("     2. Display Student Info")
     print("     3. Add Students")
     print("     4. Delete Students")
-    print("     5. Clear Records\n\n")
+    print("     5. GPA Checker")
+    print("     6. Clear Records\n\n")
 
 def menuInput():
     while True:
         try:
             f = int(input("Please choose a function to perform: "))
-            if f in (0,1,2,3,4,5):
+            if f in (0,1,2,3,4,5,6):
                 break 
         except ValueError:
             print("      ── Invalid Input ── ")
@@ -397,6 +422,9 @@ def sortInput(f):
         case 4:
             deleteStudent()
         case 5:
+            listStudent()
+            askPassing()
+        case 6:
             clearRecord() 
 
 
@@ -417,45 +445,64 @@ def addStudent():
     name = input("Enter student's name: ")
     age = int(input(f"How old is {name}?: "))
     major = input(f"What is {name}'s major?: ")
+    minor = input(f"{name}'s Minor? (or press Enter to skip): ")
     gpa = float(input(f"What is {name}'s GPA?: "))
     bio = input(
-        f"Enter a biography for {name} that is between 100-750 characters"
+        f"Enter a biography for {name} that is between 100-750 characters "
         "or enter nothing:\n"
         )
-    
-    # Work Experience Input
-    while True:
-        work_experience = input(
-            "==Work Experience Format==\n"
-            "'Job Title, Company, MonthYr, Present'\n"
-            "(e.g. 'Software Engineer, Google, Jan2024, Mar2025').\n"
-            f"Please enter work experience for {name} (or press Enter to skip):\n"
-        ).strip()
-        if work_experience == "":
-            work_experience = None
-            break
-        try:
-            Employment.from_string(work_experience)
-            break
-        except ValueError as e:
-            print(f"Error: {e}\nPlease try again.\n")
 
-    # Volunteer Work Input
+    # Work Experience Input
+    work_experiences = []
     while True:
-        volunteer_work = input(
-            "==Volunteer Work Format==\n"
-            "'Volunteer Title, Organization/Company, Hours Worked'\n"
-            "(e.g. 'Chef, NY Homeless Shelter, 225')\n"
-            f"Please enter volunteer experience for {name} as shown above:\n"
-        ).strip()
-        if volunteer_work == "":
-            volunteer_work = None
-            break
         try:
-            Volunteering.from_string(volunteer_work)
-            break
-        except ValueError as e:
-            print(f"Error: {e}\nPlease try again.\n")
+            k = int(input("How many work experiences to add? (0 to skip): "))
+            if 0 <= k <= 10:
+                break
+        except ValueError:
+            print("Please enter a valid number.")
+
+    print(f"Work Experience Format:"
+            "'Job Title, Company, MonthYr, Present'... "
+            "(e.g. 'Software Engineer, Google, Jan2024, Mar2025').\n")
+    
+    for _ in range(k):
+        while True:
+            entry = input("Enter work experience: ").strip()
+            try:
+                Employment.from_string(entry)
+                work_experiences.append(entry)
+                break
+            except ValueError as e:
+                print(f"Error: {e}\nPlease try again.\n")
+
+    work_experience = work_experiences if work_experiences else None
+
+    volunteer_experiences = []
+    while True:
+        try:
+            k = int(input("How many volunteer experiences to add (0 to skip): "))
+            if 0 <= k <= 10:
+                break
+        except ValueError:
+            print("Please enter a valid number.")
+
+    print(f"Volunteer Work Format:"
+            "'Volunteer Title, Organization/Company, Hours Worked'"
+            "(e.g. 'Chef, NY Homeless Shelter, 225')\n"
+          )
+
+    for _ in range(k):
+        while True:
+            entry = input("Enter volunteer experience: ").strip()
+            try:
+                Volunteering.from_string(entry)
+                volunteer_experiences.append(entry)
+                break
+            except ValueError as e:
+                print(f"Error: {e}\nPlease try again.\n")
+
+    volunteer_work = volunteer_experiences if volunteer_experiences else None
 
     # Skills Input
     skills = []
@@ -468,12 +515,13 @@ def addStudent():
             print("Please enter a valid number.")
         else:
             continue
+
     for _ in range(k):
         skill = input(f"Please enter a skill that {name} has: ")
         skills.append(skill)
 
     # Return
-    student = Student(name,age,major,gpa,bio,work_experience,volunteer_work,skills)
+    student = Student(name,age,major,minor,gpa,bio,work_experience,volunteer_work,skills)
     return student
 
 def deleteStudent():
@@ -488,10 +536,12 @@ def deleteStudent():
                 saveStudents()
                 print("Student deleted successfully.")
                 break
+            elif 0 == choice:
+                break
             else:
                 print("That student number doesn't exist.")
         except ValueError:
-            print("Please enter a valid student number.")
+            print("Please enter a valid student number or quit (enter 0).")
 
 def clearRecord():
     n = input("Are you sure you want to clear record (y/n)?: ").strip().lower()
@@ -509,11 +559,23 @@ def displayStu(s):
     except ValueError:
         print("Please enter a valid number.")
 
-def askPassing(stud):
-    if stud.is_passing() == False:
-        ans = input(f"Would you like to change {stud.name}'s GPA (y/n)?: ").strip().lower()
-        if ans == "y":
-            stud.update_gpa(4.0)
+def askPassing():
+    try:
+        n = int(input("Choose a student: "))
+        if 1 <= n <= len(record):
+            student = record[n - 1]
+            if not student.is_passing():
+                ans = input(f"Would you like to change {student.name}'s GPA (y/n)?: ").strip().lower()
+                if ans == "y":
+                    gpa = float(input("New GPA: "))
+                    student.update_gpa(gpa)
+                    saveStudents()
+            else:
+                print(f"{student.name}'s GPA is {student.gpa:.2f} — Passing.")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Please enter a valid number.")
 
 
 # ==================== Persistence Functions (Save/Load) ====================
@@ -529,8 +591,8 @@ def loadStudents():
             data = json.load(file)
             for d in data:
                 student = Student(
-                    d["name"], d["age"], d["major"], d["gpa"],
-                    d["bio"], d["work_experience"], 
+                    d["name"], d["age"], d["major"], d.get("minor", ""), 
+                    d["gpa"], d["bio"], d["work_experience"], 
                     d["volunteer_work"], d["skills"]
                 )
                 record.append(student)
@@ -550,141 +612,6 @@ def main():
         else:
             sortInput(f)
 
-    """
-    saveStudents()
-    for stu in record:
-        print(stu)
-    for stu in record:
-        stu.display()
-    """
-
 
 if __name__ == "__main__":
     main()
-
-
-
-
-# Old Code:
-
-"""
-def getFunction():
-    print("--------------------------")
-    print("-Please select a function-")
-    print("1. List Students and Number")
-    print("2. Display Student Information")
-    print("3. Add Students")
-    print("4. Delete Students")
-    print("0. Quit Program")
-    print("(Select function number listed)")
-    print("--------------------------\n")
-    while True:
-        Function = input("")
-        try:
-            if 0 <= int(Function) <= 4:
-                break
-            else:
-                print("Please enter a valid number (1-4)")
-        except ValueError:
-            print("Please enter a valid number (1-4)")
-    return int(Function)
-
-def listStudent():
-    if not record:
-        print("There are no students in directory!\n")
-    else:
-        print ("--Students in Directory--\n")
-        for i, student in enumerate(record, start=1):
-            print(f"{i}. {student['Name']}")
-
-def addStudent():
-    name = getName()
-    age = getAge()
-    major = getMajor()
-    gpa = getGpa()
-    data = {"Name": name, "Age": age, "Major": major, "Gpa": gpa,}
-    record.append(data)
-    saveStudents()
-
-def deleteStudent():
-    listStudent()
-    while True:
-        if not record:
-            break
-        try:
-            choice = int(input("\nWhich student would you like to delete?: "))
-            if 1 <= choice <= len(record):
-                del record[choice - 1]
-                saveStudents()
-                print("Student deleted successfully.")
-                break
-            else:
-                print("That student number doesn't exist.")
-        except ValueError:
-            print("Please enter a valid student number.")
-
-def getName():
-    while True:
-        student = str(input("Student Name: "))
-        if student.isalpha():
-            return student.title().strip()
-        else:
-            print("Please enter only letters.\n")
-
-def getAge():
-    while True:
-        Age = input("Age: ")
-        try:
-            return int(Age)
-        except ValueError:
-            print("Please enter a valid age and try again (Whole number): ")
-
-def getMajor():
-    major = str(input("Major: "))
-    return major.title().strip()
-
-def getGpa():
-    while True:
-        try:
-            Gpa = float(input("GPA: "))
-            if 0.0 <= Gpa <= 4.0:
-                return Gpa
-            else:
-                print("Please enter a valid GPA and try again: ")
-        except ValueError:
-            print("Please enter a valid GPA and try again: ") 
-
-def displayStudent():
-    if not record:
-        print("There are no students in directory!\n")
-    else:
-        for i, student in enumerate(record, start=1):            
-            print()
-            print(f"--Student {i}--")
-            print(f"Name: {student["Name"]}")
-            print(f"Age: {student["Age"]}")
-            print(f"Major: {student["Major"]}")
-            print(f"Gpa: {student["Gpa"]}\n")
-         
-def loadStudents():
-    try:
-        with open("student_record.csv", "r") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                row["Age"] = int(row["Age"])
-                row["Gpa"] = float(row["Gpa"])
-                record.append(row)
-    except FileNotFoundError:
-        return
-
-def saveStudents():
-    with open("student_record.csv", "w", newline="") as file:
-        fieldnames = ["Name", "Age", "Major", "Gpa"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        if file.tell() == 0:
-            writer.writeheader()
-            for student in record:
-                writer.writerow(student)
-
-
-"""

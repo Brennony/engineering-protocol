@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "name": "Brennon York",
+    "age": 18,
+    "major": "Computer Engineering",
+    "minor": "",
+    "gpa": 3.4,
+    "bio": "",
+    "work_experience": [],
+    "volunteer_work": [],
+    "skills": [
+      "Coding"
+    ]
+  },
+  {
+    "name": "Jacob",
+    "age": 22,
+    "major": "History",
+    "minor": "Biblical Studies",
+    "gpa": 3.8,
+    "bio": "",
+    "work_experience": [],
+    "volunteer_work": [],
+    "skills": [
+      "Writing",
+      "Research"
+    ]
+  }
+]
