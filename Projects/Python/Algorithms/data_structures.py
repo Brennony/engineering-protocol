@@ -74,14 +74,14 @@ class LinkedList:
         self.head = None
 
     def append(self, value):
-        x1 = Node(value)
+        deltax = Node(value)
         if self.head is None:
-            self.head = x1
+            self.head = deltax
             return
         x = self.head
         while x.next is not None:
             x = x.next
-        x.next = x1
+        x.next = deltax
 
     def display(self):
         values = []
@@ -98,6 +98,21 @@ class LinkedList:
             x = x.next
         return False
 
+    def delete(self, value):
+        if self.head is None:
+            return
+        if self.head.value == value:
+            self.head = self.head.next
+            return
+        prev = self.head
+        current = self.head.next
+        while current is not None:
+            if current.value == value:
+                prev.next = current.next
+                return
+            prev = current
+            current = current.next
+
 
 
 def main():
@@ -106,9 +121,15 @@ def main():
     ll.append(7)
     ll.append(12)
     ll.append(99)
-    ll.display()              # should print 3, 7, 12, 99
-    print(ll.search(12))      # True
-    print(ll.search(50))      # False
+    ll.display()          # 3, 7, 12, 99
+    ll.delete(12)
+    ll.display()          # 3, 7, 99
+    ll.delete(3)          # delete head
+    ll.display()          # 7, 99
+    ll.delete(99)         # delete tail
+    ll.display()          # 7
+    ll.delete(50)         # value not in list — should do nothing
+    ll.display()          # 7
 
 
 if __name__ == "__main__":
