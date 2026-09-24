@@ -114,22 +114,44 @@ class LinkedList:
             current = current.next
 
 
+# Hash Table
+
+class HashTable:
+    def __init__(self, size=10):
+        self.size = size
+        self.buckets = [[] for _ in range(size)]
+    
+    def _hash(self, key):
+        return sum(ord(c) for c in key) % self.size
+    
+    def set(self, key, value):
+        index = self._hash(key)
+        bucket = self.buckets[index]
+        for i, k in enumerate(bucket):
+            if k == key:
+                bucket[i] = (key,value)
+                return
+        bucket.append((key,value))
+    
+    def get(self, key):
+        index = self._hash(key)
+        bucket = self.buckets[index]
+        for _, (k,v) in enumerate(bucket):
+            if k == key:
+                return v
+        raise KeyError(key)
+
 
 def main():
-    ll = LinkedList()
-    ll.append(3)
-    ll.append(7)
-    ll.append(12)
-    ll.append(99)
-    ll.display()          # 3, 7, 12, 99
-    ll.delete(12)
-    ll.display()          # 3, 7, 99
-    ll.delete(3)          # delete head
-    ll.display()          # 7, 99
-    ll.delete(99)         # delete tail
-    ll.display()          # 7
-    ll.delete(50)         # value not in list — should do nothing
-    ll.display()          # 7
+    ht = HashTable()
+    ht.set("name", "Brennon")
+    ht.set("age", 18)
+    ht.set("major", "Computer Engineering")
+    print(ht.get("name"))     # Brennon
+    print(ht.get("age"))     # 18
+    ht.set("name", "Jacob")  # update existing key
+    print(ht.get("name"))    # Jacob
+    print(ht.get("missing")) # KeyError
 
 
 if __name__ == "__main__":
