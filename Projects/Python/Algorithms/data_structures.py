@@ -1,4 +1,4 @@
-# Brennon York  |  Data Structures  |  9/21/2026
+# Brennon York  |  Data Structures  |  9/24/2026
 
 
 # LIFO vs FIFO 
@@ -142,16 +142,134 @@ class HashTable:
         raise KeyError(key)
 
 
+# Data Trees
+
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+class BST:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, value):
+        if self.root == None:
+            self.root = TreeNode(value)
+            return
+        current = self.root
+        while current is not None:
+            if value < current.value:
+                if current.left is None:
+                    current.left = TreeNode(value)
+                    return
+                current = current.left
+            else:
+                if current.right is None:
+                    current.right = TreeNode(value)
+                    return
+                current = current.right
+
+    def search(self, value):
+        if self.root == None:
+            return False
+        current = self.root
+        while current is not None:
+            if value < current.value:
+                current = current.left
+            elif value > current.value:
+                current = current.right
+            else:
+                return True
+        return False
+
+
+
+# Menu and Case handling
+
+def Menu():
+    print("Usable Data Structures:")
+    print("1. Stack\n2. Queue\n3. Linked List\n4. Hash Table\n5. Binary Tree")
+    while True:
+        x = input("\nPlease select a program: ")
+        try:
+            choice = int(x)
+            if choice in (1, 2, 3, 4, 5):
+                return choice
+        except ValueError:
+            pass
+        print("Please enter a valid number (1-5).")
+
+
+def sortInput(choice):
+    """Route the menu selection to a demo/test of the matching class."""
+
+    if choice == 1:
+        print("\n-- Stack --")
+        s = Stack()
+        s.push(10)
+        s.push(20)
+        s.push(30)
+        print("Size:", s.size())
+        print("Peek:", s.peek())
+        print("Pop:", s.pop())
+        print("Size after pop:", s.size())
+        print("Is empty:", s.is_empty())
+
+    elif choice == 2:
+        print("\n-- Queue --")
+        q = Queue()
+        q.enqueue(10)
+        q.enqueue(20)
+        q.enqueue(30)
+        print("Size:", q.size())
+        print("Peek:", q.peek())
+        print("Dequeue:", q.dequeue())
+        print("Size after dequeue:", q.size())
+        print("Is empty:", q.is_empty())
+
+    elif choice == 3:
+        print("\n-- Linked List --")
+        ll = LinkedList()
+        ll.append(10)
+        ll.append(20)
+        ll.append(30)
+        ll.display()
+        print("Search 20:", ll.search(20))
+        print("Search 99:", ll.search(99))
+        ll.delete(20)
+        ll.display()
+
+    elif choice == 4:
+        print("\n-- Hash Table --")
+        ht = HashTable()
+        ht.set("a", 1)
+        ht.set("b", 2)
+        ht.set("a", 99)  # overwrite
+        print("a ->", ht.get("a"))
+        print("b ->", ht.get("b"))
+        try:
+            ht.get("z")
+        except KeyError:
+            print("z -> KeyError raised (expected)")
+
+    elif choice == 5:
+        print("\n-- Binary Tree --")
+        bst = BST()
+        for value in (8, 3, 10, 1, 6, 14):
+            bst.insert(value)
+        print("Search 6:", bst.search(6))
+        print("Search 7:", bst.search(7))
+        print("Search 14:", bst.search(14))
+        print("Search 99:", bst.search(99))
+
+
+# Main
+
 def main():
-    ht = HashTable()
-    ht.set("name", "Brennon")
-    ht.set("age", 18)
-    ht.set("major", "Computer Engineering")
-    print(ht.get("name"))     # Brennon
-    print(ht.get("age"))     # 18
-    ht.set("name", "Jacob")  # update existing key
-    print(ht.get("name"))    # Jacob
-    print(ht.get("missing")) # KeyError
+    choice = Menu()
+    sortInput(choice)
 
 
 if __name__ == "__main__":
