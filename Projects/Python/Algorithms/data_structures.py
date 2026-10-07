@@ -184,6 +184,41 @@ class BST:
                 return True
         return False
 
+    def inorder(self):
+        result = []
+        self._inorder(self.root, result)
+        return result
+
+    def _inorder(self,node,result):
+        if node is None:
+            return
+        self._inorder(node.left, result)
+        result.append(node.value)
+        self._inorder(node.right, result)
+
+    def preorder(self):
+        result = []
+        self._preorder(self.root, result)
+        return result
+
+    def _preorder(self,node,result):
+        if node is None:
+            return
+        result.append(node.value)
+        self._preorder(node.left, result)
+        self._preorder(node.right, result)
+    
+    def postorder(self):
+            result = []
+            self._postorder(self.root, result)
+            return result
+
+    def _postorder(self,node,result):
+        if node is None:
+            return
+        self._postorder(node.left, result)
+        self._postorder(node.right, result)
+        result.append(node.value)
 
 
 # Menu and Case handling
@@ -263,6 +298,24 @@ def sortInput(choice):
         print("Search 7:", bst.search(7))
         print("Search 14:", bst.search(14))
         print("Search 99:", bst.search(99))
+
+        print("\n-- Binary Tree Inorder --")
+        tree = BST()
+        for v in [100,400,300,20,10,50,140,500]:
+            tree.insert(v)
+        print(tree.inorder())
+
+        print("\n-- Binary Tree Preorder --")
+        tree = BST()
+        for v in [100,400,300,20,10,50,140,500]:
+            tree.insert(v)
+        print(tree.preorder())
+
+        print("\n-- Binary Tree Postorder --")
+        tree = BST()
+        for v in [100,400,300,20,10,50,140,500]:
+            tree.insert(v)
+        print(tree.postorder())
 
 
 # Main
