@@ -307,7 +307,7 @@ def sortInput(choice):
 
         print("\n-- Binary Tree Preorder --")
         tree = BST()
-        for v in [100,400,300,20,10,50,140,500]:
+        for v in [100,20,10,50,400,300,140,500]:
             tree.insert(v)
         print(tree.preorder())
 
