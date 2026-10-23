@@ -39,8 +39,25 @@ def get_neighbors(grid, r, c):
         nc = c + dc
         if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] == 1:
             neighbors.append((nr,nc))
-
     return neighbors
 
+def solve_dfs(grid, start, end):
+    stack = [start]
+    visited = set()
+
+    while stack:
+        cell = stack.pop()
+        r, c = cell
+        if cell == end:
+            return True
+        if cell in visited:
+            continue
+        visited.add(cell)
+        for neighbor in get_neighbors(grid, r, c):
+            stack.append(neighbor)
+    return False
+
 print_maze(maze,start,end)
-print(get_neighbors(maze,3,3))
+print(solve_dfs(maze, start, end))        # expect True
+print(solve_dfs(maze, start, (4, 2)))     # (4, 2) is a wall: expect False
+print(solve_dfs(maze, start, start))      # expect True, immediately
