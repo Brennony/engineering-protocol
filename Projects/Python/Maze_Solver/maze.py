@@ -1,4 +1,8 @@
-# Brennon York  |  Maze Solver  |  10/22/2026
+# Brennon York  |  Maze Solver V1.0 Alpha |  10/23/2026
+
+
+# This programw will eventually be able to solve maze's imported online through artiifical intelligence to identify the maze jpg/png/etc
+# And mark each open spot as a 1 and closed as 0, then it will solve the maze through whatever means necesary.
 
 
 # Sample Maze
