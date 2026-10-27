@@ -1,7 +1,7 @@
 # Brennon York  |  Maze Solver V1.0 Alpha |  10/23/2026
 
 
-# This programw will eventually be able to solve maze's imported online through artiifical intelligence to identify the maze jpg/png/etc
+# This program will eventually be able to solve maze's imported online through artiifical intelligence to identify the maze jpg/png/etc
 # And mark each open spot as a 1 and closed as 0, then it will solve the maze through whatever means necesary.
 
 
@@ -47,21 +47,29 @@ def get_neighbors(grid, r, c):
 
 def solve_dfs(grid, start, end):
     stack = [start]
-    visited = set()
+    came_from = {start: None}
 
     while stack:
         cell = stack.pop()
-        r, c = cell
         if cell == end:
-            return True
-        if cell in visited:
-            continue
-        visited.add(cell)
-        for neighbor in get_neighbors(grid, r, c):
-            stack.append(neighbor)
-    return False
+            path = []
+            while cell is not None:
+                path.append(cell)
+                cell = came_from[cell]
+            path.reverse()
+            return path
 
-print_maze(maze,start,end)
-print(solve_dfs(maze, start, end))        # expect True
-print(solve_dfs(maze, start, (4, 2)))     # (4, 2) is a wall: expect False
-print(solve_dfs(maze, start, start))      # expect True, immediately
+        r, c = cell
+
+        for neighbor in get_neighbors(grid, r, c):
+            if neighbor not in came_from:
+                came_from[neighbor] = cell
+                stack.append(neighbor)
+
+    return None
+
+path = solve_dfs(maze, start, end)
+print(path)
+print(len(path) - 1)                      # number of moves
+print(solve_dfs(maze, start, (4, 2)))     # wall cell: expect None
+print(solve_dfs(maze, start, start))      # expect [(1, 1)]
